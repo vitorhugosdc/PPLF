@@ -1,13 +1,34 @@
 #lang racket
 
+(require racket/base)
+
 (define labirinto
   '(("#" "#" "#" "#" "#" "#" "#")
-    ("#" " " " " " " " " "#" "#")
+    ("#" " " "D" " " " " "#" "#")
     ("#" " " "#" "#" "#" " " "#")
-    ("#" " " "#" " " " " " " "#")
+    ("#" " " "#" " " " " "S" "#")
     ("#" "#" "#" "#" "#" "#" "#")))
 
 (define posição-inicial '(1 1))
+(define posição-saída '(3 5))
+
+; Desafio de programação simples
+(define desafio-posição '(1 2))
+
+(define desafio-resolvido #f)
+
+(define (desafio-soma)
+  (display "Desafio: Insira o corpo de uma função que some dois números.\n")
+  (display "Por exemplo, você pode digitar (+ x y).\n")
+  (let* ([resposta (read)]
+         [contexto (make-base-namespace)]
+         [função-soma (eval `(lambda (x y) ,resposta) contexto)]) ; Avalia no contexto adequado
+    (let ([resultado (função-soma 2 3)]) ; Testa a função
+      (if (= resultado 5)
+          (begin
+            (set! desafio-resolvido #t)
+            (display "Desafio resolvido! Você pode continuar.\n"))
+          (display "Resposta incorreta. Tente novamente.\n")))))
 
 (define (mostrar-labirinto labirinto posição)
   (for ([linha (in-range (length labirinto))])
@@ -25,10 +46,10 @@
          [coluna (second posição)]
          [nova-posição
           (cond
-            [(equal? direção 'norte) (list (- linha 1) coluna)]
-            [(equal? direção 'sul)   (list (+ linha 1) coluna)]
-            [(equal? direção 'leste) (list linha (+ coluna 1))]
-            [(equal? direção 'oeste) (list linha (- coluna 1))])]
+            [(equal? direção 'cima) (list (- linha 1) coluna)]
+            [(equal? direção 'baixo)   (list (+ linha 1) coluna)]
+            [(equal? direção 'direita) (list linha (+ coluna 1))]
+            [(equal? direção 'esquerda) (list linha (- coluna 1))])]
          [nova-linha (first nova-posição)]
          [nova-coluna (second nova-posição)])
     (if (and (>= nova-linha 0) (< nova-linha (length labirinto))
@@ -39,13 +60,21 @@
 
 (define (jogar)
   (define posição-atual posição-inicial)
-  (display "Use 'norte', 'sul', 'leste', 'oeste' para mover. Digite 'sair' para sair.\n")
+  (display "Bem-vindo ao Labirinto de Racket! Encontre a saída e resolva os desafios.\n")
   (let loop ([posição posição-atual])
-    (mostrar-labirinto labirinto posição)
-    (let ([movimento (read)])
-      (cond
-        [(equal? movimento 'sair) (display "Jogo encerrado.\n")]
-        [else
-         (loop (mover labirinto posição movimento))]))))
+    (cond
+      [(equal? posição posição-saída)
+       (if desafio-resolvido
+           (display "Parabéns! Você encontrou a saída e resolveu os desafios!\n")
+           (display "Você encontrou a saída, mas ainda há desafios a resolver.\n"))]
+      [else
+       (mostrar-labirinto labirinto posição)
+       (when (and (equal? posição desafio-posição) (not desafio-resolvido))
+         (desafio-soma))
+       (let ([movimento (read)])
+         (cond
+           [(equal? movimento 'sair) (display "Jogo encerrado.\n")]
+           [else
+            (loop (mover labirinto posição movimento))]))])))
 
 (jogar)
