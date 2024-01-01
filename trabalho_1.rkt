@@ -6,7 +6,7 @@
 (define labirintos
   (list
     '(("#" "#" "#" "#" "#" "#" "#")
-      ("#" " " "D" " " " " "#" "#")
+      ("#" " " "D" " " "D" "#" "#")  ; Novo "D" adicionado aqui
       ("#" " " "#" "#" " " " " "#")
       ("#" " " "#" " " " " "S" "#")
       ("#" "#" "#" "#" "#" "#" "#"))
@@ -16,16 +16,16 @@
       ("#" " " " " " " "S" " " "#")
       ("#" "#" "#" "#" "#" "#" "#"))))
 
+
 ; Definição das posições iniciais e de saída para cada fase
 (define posições-iniciais '((1 1) (1 1)))
 (define posições-saída '((3 5) (3 5)))
 
-; Desafio de programação simples (pode ser ajustado para cada fase)
-(define desafio-posição '(1 2))
-(define desafio-resolvido #f)
+; Desafio resolvido para cada fase
+(define desafios-resolvidos (make-vector (length labirintos) #f))
 
-; Função para o desafio de programação
-(define (desafio-soma)
+; Função para o desafio de soma
+(define (desafio-soma índice-fase)
   (display "Desafio: Insira o corpo de uma função que some dois números.\n")
   (display "Por exemplo, você pode digitar (+ x y).\n")
   (let* ([resposta (read)]
@@ -34,9 +34,30 @@
     (let ([resultado (função-soma 2 3)])
       (if (= resultado 5)
           (begin
-            (set! desafio-resolvido #t)
+            (vector-set! desafios-resolvidos índice-fase #t)
             (display "Desafio resolvido! Você pode continuar.\n"))
           (display "Resposta incorreta. Tente novamente.\n")))))
+
+; Função para o desafio de multiplicação (segunda fase)
+(define (desafio-multiplicação índice-fase)
+  (display "Desafio 2: Insira o corpo de uma função que multiplique dois números.\n")
+  (display "Por exemplo, você pode digitar (* x y).\n")
+  (let* ([resposta (read)]
+         [contexto (make-base-namespace)]
+         [função-multiplicação (eval `(lambda (x y) ,resposta) contexto)])
+    (let ([resultado (função-multiplicação 2 3)])
+      (if (= resultado 6)
+          (begin
+            (vector-set! desafios-resolvidos índice-fase #t)
+            (display "Desafio resolvido! Você pode continuar.\n"))
+          (display "Resposta incorreta. Tente novamente.\n")))))
+
+
+
+; Lista de funções de desafio para cada fase
+
+(define desafios (list desafio-soma desafio-multiplicação))
+
 
 ; Função para mostrar o labirinto
 (define (mostrar-labirinto labirinto posição)
@@ -68,9 +89,17 @@
         nova-posição
         posição)))
 
+; Associação de posições de desafios e suas funções correspondentes para cada fase
+(define desafios-posições
+  (list
+    (list (cons '(1 2) desafio-soma) (cons '(1 4) desafio-multiplicação))  ; Fase 1
+    (list (cons '(2 3) desafio-multiplicação))                            ; Fase 2
+  ))
+
 ; Função principal para jogar uma fase
 (define (jogar-fase índice-fase)
   (define labirinto-atual (list-ref labirintos índice-fase))
+  (define desafios-da-fase (list-ref desafios-posições índice-fase))
   (define posição-inicial (list-ref posições-iniciais índice-fase))
   (define posição-saída (list-ref posições-saída índice-fase))
   (define posição-atual posição-inicial)
@@ -80,17 +109,23 @@
   (define (loop posição)
     (cond
       [(equal? posição posição-saída)
-       (if desafio-resolvido
+       (if (vector-ref desafios-resolvidos índice-fase)
            (if (< índice-fase (sub1 (length labirintos)))
                (begin
-                 (set! desafio-resolvido #f)
+                 (vector-set! desafios-resolvidos índice-fase #f)
                  (jogar-fase (add1 índice-fase)))
                (display "Parabéns! Você encontrou a saída e resolveu os desafios de todas as fases!\n"))
            (display "Você encontrou a saída, mas ainda há desafios a resolver.\n"))]
       [else
        (mostrar-labirinto labirinto-atual posição)
-       (when (and (equal? posição desafio-posição) (not desafio-resolvido))
-         (desafio-soma))
+       (for-each (lambda (par-desafio-posição)
+                   (let ([pos-desafio (car par-desafio-posição)]
+                         [função-desafio (cdr par-desafio-posição)])
+                     (when (and (equal? posição pos-desafio)
+                                (not (vector-ref desafios-resolvidos índice-fase)))
+                       (função-desafio índice-fase)
+                       (vector-set! desafios-resolvidos índice-fase #t))))
+                 desafios-da-fase)
        (let ([movimento (read)])
          (cond
            [(equal? movimento 'sair) (display "Jogo encerrado.\n")]
