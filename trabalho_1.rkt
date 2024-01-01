@@ -92,9 +92,10 @@
 ; Associação de posições de desafios e suas funções correspondentes para cada fase
 (define desafios-posições
   (list
-    (list (cons '(1 2) desafio-soma) (cons '(1 4) desafio-multiplicação))  ; Fase 1
+    (list (cons '(1 2) desafio-soma) (cons '(1 4) desafio-multiplicação) (cons '(1 4) desafio-multiplicação))  ; Fase 1
     (list (cons '(2 3) desafio-multiplicação))                            ; Fase 2
   ))
+
 
 ; Função principal para jogar uma fase
 (define (jogar-fase índice-fase)
@@ -121,8 +122,7 @@
        (for-each (lambda (par-desafio-posição)
                    (let ([pos-desafio (car par-desafio-posição)]
                          [função-desafio (cdr par-desafio-posição)])
-                     (when (and (equal? posição pos-desafio)
-                                (not (vector-ref desafios-resolvidos índice-fase)))
+                     (when (equal? posição pos-desafio)
                        (função-desafio índice-fase)
                        (vector-set! desafios-resolvidos índice-fase #t))))
                  desafios-da-fase)
@@ -133,6 +133,7 @@
             (loop (mover labirinto-atual posição movimento))]))]))
 
   (loop posição-inicial))
+
 
 ; Iniciar o jogo na primeira fase
 (jogar-fase 0)
