@@ -52,11 +52,25 @@
             (display "Desafio resolvido! Você pode continuar.\n"))
           (display "Resposta incorreta. Tente novamente.\n")))))
 
+; Função para o desafio de somar elementos de uma lista
+(define (desafio-soma-lista índice-fase)
+  (display "Desafio 2: Escreva a definição completa de uma função que some todos os elementos de uma lista.\n")
+  (display "Por favor, defina o cabeçalho da função como (define (soma-lista lst)... \n\n")
+  (let* ([definição-função (read)]
+         [contexto (make-base-namespace)])
+    (eval definição-função contexto)  ; Avalia a definição da função
+    (let ([função-soma-lista (eval 'soma-lista contexto)])  ; Recupera a função definida
+      (let ([resultado (função-soma-lista (list 1 2 3 4 5))])  ; Testa a função
+        (if (= resultado 15)
+            (begin
+              (vector-set! desafios-resolvidos índice-fase #t)
+              (display "Desafio resolvido! Você pode continuar.\n"))
+            (display "Resposta incorreta. Tente novamente.\n"))))))
 
 
 ; Lista de funções de desafio para cada fase
 
-(define desafios (list desafio-soma desafio-multiplicação))
+(define desafios (list desafio-soma desafio-soma-lista))
 
 
 ; Função para mostrar o labirinto
@@ -93,7 +107,7 @@
 (define desafios-posições
   (list
     (list (cons '(1 2) desafio-soma) (cons '(1 4) desafio-multiplicação))  ; Fase 1
-    (list (cons '(1 2) desafio-multiplicação))                             ; Fase 2
+    (list (cons '(1 2) desafio-soma-lista))                                 ; Fase 2
   ))
 
 
