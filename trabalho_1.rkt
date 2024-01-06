@@ -89,12 +89,13 @@
         nova-posição
         posição)))
 
-; Associação de posições de desafios e suas funções correspondentes para cada fase
+; Associação de posições de desafios e suas funções correspondentes para cada fase; Associação de posições de desafios e suas funções correspondentes para cada fase
 (define desafios-posições
   (list
-    (list (cons '(1 2) desafio-soma) (cons '(1 4) desafio-multiplicação) (cons '(1 4) desafio-multiplicação))  ; Fase 1
-    (list (cons '(2 3) desafio-multiplicação))                            ; Fase 2
+    (list (cons '(1 2) desafio-soma) (cons '(1 4) desafio-multiplicação))  ; Fase 1
+    (list (cons '(1 2) desafio-multiplicação))                             ; Fase 2
   ))
+
 
 
 ; Função principal para jogar uma fase
