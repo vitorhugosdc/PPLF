@@ -91,10 +91,10 @@
          [coluna (second posição)]
          [nova-posição
           (cond
-            [(equal? direção 'cima) (list (- linha 1) coluna)]
-            [(equal? direção 'baixo) (list (+ linha 1) coluna)]
-            [(equal? direção 'direita) (list linha (+ coluna 1))]
-            [(equal? direção 'esquerda) (list linha (- coluna 1))])]
+            [(equal? direção 'w) (list (- linha 1) coluna)]
+            [(equal? direção 's) (list (+ linha 1) coluna)]
+            [(equal? direção 'd) (list linha (+ coluna 1))]
+            [(equal? direção 'a) (list linha (- coluna 1))])]
          [nova-linha (first nova-posição)]
          [nova-coluna (second nova-posição)])
     (if (and (>= nova-linha 0) (< nova-linha (length labirinto))
@@ -148,6 +148,7 @@
             (loop (mover labirinto-atual posição movimento))]))]))
 
   (loop posição-inicial))
+
 
 
 ; Iniciar o jogo na primeira fase
