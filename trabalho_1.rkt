@@ -94,7 +94,7 @@
             [(equal? direção 'w) (list (- linha 1) coluna)]
             [(equal? direção 's) (list (+ linha 1) coluna)]
             [(equal? direção 'd) (list linha (+ coluna 1))]
-            [(equal? direção 'a) (list linha (- coluna 1))])]
+            [(equal? direção 'e) (list linha (- coluna 1))])]
          [nova-linha (first nova-posição)]
          [nova-coluna (second nova-posição)])
     (if (and (>= nova-linha 0) (< nova-linha (length labirinto))
@@ -103,24 +103,44 @@
         nova-posição
         posição)))
 
-; Associação de posições de desafios e suas funções correspondentes para cada fase; Associação de posições de desafios e suas funções correspondentes para cada fase
+; Associação de posições de desafios e suas funções correspondentes para cada fase;
 (define desafios-posições
   (list
     (list (cons '(1 2) desafio-soma) (cons '(1 4) desafio-multiplicação))  ; Fase 1
     (list (cons '(1 2) desafio-soma-lista))                                 ; Fase 2
   ))
 
+; Conteúdos educativos para cada fase
+(define conteúdos-educativos
+  (list
+    (lambda ()
+      (display "Bem-vindo à fase 1!\nNesta fase, você aprenderá sobre soma e multiplicação básica.\n\n")
+      (display "A soma é uma operação que adiciona números. Por exemplo, 2 + 3 é igual a 5.\n")
+      (display "A multiplicação é uma operação que multiplica números. Por exemplo, 2 * 3 é igual a 6.\n\n"))
+    (lambda ()
+      (display "Bem-vindo à fase 2!\nNesta fase, você aprenderá sobre outras operações matemáticas...\n\n"))
+
+  ))
+
+; Função para exibir conteúdo educativo
+(define (exibir-conteúdo-educativo índice-fase)
+  (let ([conteúdo (list-ref conteúdos-educativos índice-fase)])
+    (conteúdo)))
+
 
 
 ; Função principal para jogar uma fase
 (define (jogar-fase índice-fase)
+  ; Exibir conteúdo educativo antes de começar a fase
+  (exibir-conteúdo-educativo índice-fase)
+
   (define labirinto-atual (list-ref labirintos índice-fase))
   (define desafios-da-fase (list-ref desafios-posições índice-fase))
   (define posição-inicial (list-ref posições-iniciais índice-fase))
   (define posição-saída (list-ref posições-saída índice-fase))
   (define posição-atual posição-inicial)
 
-  (display "Bem-vindo ao Labirinto de Racket! Encontre a saída e resolva os desafios.\n")
+  (display "Bem-vindo ao Labirinto de Racket! Encontre a saída e resolva os desafios.\n\n")
 
   (define (loop posição)
     (cond
@@ -148,8 +168,6 @@
             (loop (mover labirinto-atual posição movimento))]))]))
 
   (loop posição-inicial))
-
-
 
 ; Iniciar o jogo na primeira fase
 (jogar-fase 0)
