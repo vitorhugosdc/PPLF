@@ -107,29 +107,31 @@
                (display "Resposta incorreta. Tente novamente.\n"))))])))
 
 (define (desafio-condicionais índice-fase)
-  (display "Desafio: Escreva uma função que verifica se um número é positivo, negativo ou zero. Digite '?' para uma dica ou 'pular' para pular.\n")
-  (let ([resposta (read)])
+  (display "Desafio: Defina uma função que verifica se um número é positivo, negativo ou zero. Digite '?' para uma dica ou 'pular' para pular.\n")
+  (display "Por favor, defina o cabeçalho da função como (define (verificar-numero n)... \n\n")
+  (let* ([definição-função (read)])
     (cond
-      [(equal? resposta '?)
+      [(equal? definição-função '?)
        (begin
          (display "Dica: Use 'cond' para verificar se o número é maior, menor ou igual a zero.\n")
          (desafio-condicionais índice-fase))]
-      [(string=? (format "~a" resposta) "pular")
+      [(string=? (format "~a" definição-função) "pular")
        (begin
          (vector-set! desafios-pulados índice-fase (add1 (vector-ref desafios-pulados índice-fase)))
          (display "Desafio pulado. Uma possível solução seria usar 'cond' para verificar as condições.\n"))]
       [else
-       (let* ([contexto (make-base-namespace)]
-              [função-condicional (eval `(lambda (n) ,resposta) contexto)])
-         (cond
-           [(and (equal? (função-condicional 5) 'positivo) 
-                 (equal? (função-condicional -3) 'negativo) 
-                 (equal? (função-condicional 0) 'zero))
-            (begin
-              (vector-set! desafios-corretos índice-fase (add1 (vector-ref desafios-corretos índice-fase)))
-              (display "Resposta correta! Você pode continuar.\n"))]
-           [else
-            (display "Resposta incorreta. Tente novamente.\n")]))])))
+       (let* ([contexto (make-base-namespace)])
+         (eval definição-função contexto)
+         (let ([função-verificar (eval 'verificar-numero contexto)])
+           (cond
+             [(and (equal? (função-verificar 5) 'positivo) 
+                   (equal? (função-verificar -3) 'negativo) 
+                   (equal? (função-verificar 0) 'zero))
+              (begin
+                (vector-set! desafios-corretos índice-fase (add1 (vector-ref desafios-corretos índice-fase)))
+                (display "Resposta correta! Você pode continuar.\n"))]
+             [else
+              (display "Resposta incorreta. Tente novamente.\n")])))])))
 
 ; Função para o desafio de somar elementos de uma lista
 (define (desafio-soma-lista índice-fase)
