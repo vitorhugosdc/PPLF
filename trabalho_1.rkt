@@ -5,9 +5,9 @@
 ; Definição dos labirintos para cada fase
 (define labirintos
   (list
-    '(("#" "#" "#" "#" "#" "#" "#")
-      ("#" " " "D" " " "D" "#" "#")  ; Novo "D" adicionado aqui
-      ("#" " " "#" "#" " " " " "#")
+    '(("#" "#" "#" "#" "#" "#" "#") ;posição inicial é (0,0)
+      ("#" " " "D" " " "D" "#" "#")
+      ("#" "D" "#" "#" " " " " "#")
       ("#" " " "#" " " " " "S" "#")
       ("#" "#" "#" "#" "#" "#" "#"))
     '(("#" "#" "#" "#" "#" "#" "#")
@@ -23,6 +23,25 @@
 
 ; Desafio resolvido para cada fase
 (define desafios-resolvidos (make-vector (length labirintos) #f))
+
+
+; Função para o desafio de declaração de variáveis
+(define (desafio-declaracao-variaveis índice-fase)
+  (display "Desafio: Qual das seguintes opções é uma declaração de variável correta em Racket?\n")
+  (display "1) (define var 10)\n")
+  (display "2) (define (var 10))\n")
+  (display "3) (define var, 10)\n")
+  (display "4) define var 10\n")
+  (display "Digite o número da sua resposta: ")
+  (let ([resposta (read)])
+    (cond
+      [(equal? resposta 1)
+       (begin
+         (vector-set! desafios-resolvidos índice-fase #t)
+         (display "Resposta correta! Você pode continuar.\n"))]
+      [else
+       (display "Resposta incorreta. Tente novamente.\n")
+       (desafio-declaracao-variaveis índice-fase)])))
 
 ; Função para o desafio de soma com opção de dica
 (define (desafio-soma índice-fase)
@@ -82,7 +101,7 @@
 
 ; Lista de funções de desafio para cada fase
 
-(define desafios (list desafio-soma desafio-soma-lista))
+(define desafios (list desafio-soma desafio-multiplicação desafio-declaracao-variaveis desafio-soma-lista))
 
 
 ; Função para mostrar o labirinto com neblina de guerra
@@ -123,8 +142,8 @@
 ; Associação de posições de desafios e suas funções correspondentes para cada fase;
 (define desafios-posições
   (list
-    (list (cons '(1 2) desafio-soma) (cons '(1 4) desafio-multiplicação))  ; Fase 1
-    (list (cons '(1 2) desafio-soma-lista))                                 ; Fase 2
+    (list (cons '(1 2) desafio-soma) (cons '(1 4) desafio-multiplicação) (cons '(2 1) desafio-declaracao-variaveis)) ; Fase 1
+    (list (cons '(1 2) desafio-soma-lista)); Fase 2
   ))
 
 ; Conteúdos educativos para cada fase
