@@ -106,6 +106,30 @@
                  (display "Desafio resolvido! Você pode continuar.\n"))
                (display "Resposta incorreta. Tente novamente.\n"))))])))
 
+(define (desafio-condicionais índice-fase)
+  (display "Desafio: Escreva uma função que verifica se um número é positivo, negativo ou zero. Digite '?' para uma dica ou 'pular' para pular.\n")
+  (let ([resposta (read)])
+    (cond
+      [(equal? resposta '?)
+       (begin
+         (display "Dica: Use 'cond' para verificar se o número é maior, menor ou igual a zero.\n")
+         (desafio-condicionais índice-fase))]
+      [(string=? (format "~a" resposta) "pular")
+       (begin
+         (vector-set! desafios-pulados índice-fase (add1 (vector-ref desafios-pulados índice-fase)))
+         (display "Desafio pulado. Uma possível solução seria usar 'cond' para verificar as condições.\n"))]
+      [else
+       (let* ([contexto (make-base-namespace)]
+              [função-condicional (eval `(lambda (n) ,resposta) contexto)])
+         (cond
+           [(and (equal? (função-condicional 5) 'positivo) 
+                 (equal? (função-condicional -3) 'negativo) 
+                 (equal? (função-condicional 0) 'zero))
+            (begin
+              (vector-set! desafios-corretos índice-fase (add1 (vector-ref desafios-corretos índice-fase)))
+              (display "Resposta correta! Você pode continuar.\n"))]
+           [else
+            (display "Resposta incorreta. Tente novamente.\n")]))])))
 
 ; Função para o desafio de somar elementos de uma lista
 (define (desafio-soma-lista índice-fase)
@@ -133,7 +157,7 @@
 
 ; Lista de funções de desafio para cada fase
 
-(define desafios (list desafio-soma desafio-multiplicação desafio-declaracao-variaveis desafio-soma-lista))
+(define desafios (list desafio-soma desafio-multiplicação desafio-declaracao-variaveis desafio-soma-lista desafio-condicionais))
 
 
 ; Função para mostrar o labirinto com neblina de guerra
@@ -171,11 +195,14 @@
         posição)))
 
 
-; Associação de posições de desafios e suas funções correspondentes para cada fase;
+; Definição das posições de desafios e suas funções correspondentes para cada fase
 (define desafios-posições
   (list
-    (list (cons '(1 2) desafio-soma) (cons '(1 4) desafio-multiplicação) (cons '(2 1) desafio-declaracao-variaveis)) ; Fase 1
-    (list (cons '(1 2) desafio-soma-lista)); Fase 2
+    (list (cons '(1 2) desafio-soma)  ; Fase 1
+          (cons '(1 4) desafio-multiplicação)
+          (cons '(2 1) desafio-declaracao-variaveis))
+    (list (cons '(1 2) desafio-condicionais) ;Fase 2
+          (cons '(2 2) desafio-soma-lista)) ; mudar esse de fase depois
   ))
 
 ; Conteúdos educativos para cada fase
@@ -195,8 +222,15 @@
       (display "   Por exemplo, '(* 2 3)' resulta em 6, que é o produto de 2 e 3.\n\n")
       (display "Pronto para colocar esses conceitos em prática? Avance pelo labirinto e enfrente os desafios!\n"))
     (lambda ()
-      (display "Bem-vindo à fase 2!\nNesta fase, você aprenderá sobre outras operações matemáticas...\n\n"))
-  ))
+      (display "Bem-vindo à Fase 2: Estruturas de Controle em Racket!\n\n")
+      (display "Nesta fase, você irá explorar as estruturas de controle fundamentais em programação, focando em condicionais e loops.\n\n")
+      (display "1. Condicionais (if, cond):\n")
+      (display "   Condicionais são usadas para tomar decisões com base em condições. Em Racket, usamos 'if' e 'cond' para representar essas estruturas.\n")
+      (display "   Exemplo: '(if (> x 5) 'grande 'pequeno)' retorna 'grande' se x for maior que 5, e 'pequeno' caso contrário.\n\n")
+      (display "2. Loops (for, while):\n")
+      (display "   Loops são usados para executar um bloco de código repetidamente. Em Racket, você pode usar 'for' ou estruturas similares para criar loops.\n")
+      (display "   Exemplo: '(for ([i (in-range 0 5)]) (display i))' irá imprimir números de 0 a 4.\n\n")
+      (display "Está pronto para mergulhar nessas estruturas de controle e desvendar os desafios? Avance e boa sorte!\n"))))
 
 ; Função para exibir conteúdo educativo
 (define (exibir-conteúdo-educativo índice-fase)
