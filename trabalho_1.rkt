@@ -73,15 +73,18 @@
 (define desafios (list desafio-soma desafio-soma-lista))
 
 
-; Função para mostrar o labirinto
+; Função para mostrar o labirinto com neblina de guerra
 (define (mostrar-labirinto labirinto posição)
+  (marcar-células-visitadas posição)
   (for ([linha (in-range (length labirinto))])
     (for ([coluna (in-range (length (list-ref labirinto 0)))])
       (cond
         [(equal? posição (list linha coluna))
          (display "@")]
+        [(list-ref (list-ref células-visitadas linha) coluna)
+         (display (list-ref (list-ref labirinto linha) coluna))]
         [else
-         (display (list-ref (list-ref labirinto linha) coluna))])
+         (display "?")])
       (display " "))
     (newline)))
 
@@ -94,7 +97,7 @@
             [(equal? direção 'w) (list (- linha 1) coluna)]
             [(equal? direção 's) (list (+ linha 1) coluna)]
             [(equal? direção 'd) (list linha (+ coluna 1))]
-            [(equal? direção 'e) (list linha (- coluna 1))])]
+            [(equal? direção 'a) (list linha (- coluna 1))])]
          [nova-linha (first nova-posição)]
          [nova-coluna (second nova-posição)])
     (if (and (>= nova-linha 0) (< nova-linha (length labirinto))
@@ -127,6 +130,31 @@
   (let ([conteúdo (list-ref conteúdos-educativos índice-fase)])
     (conteúdo)))
 
+; Estrutura para rastrear células visitadas
+(define células-visitadas '())
+
+; Função para inicializar células visitadas baseada no labirinto atual
+(define (inicializar-células-visitadas labirinto)
+  (set! células-visitadas (map (lambda (linha) (build-list (length linha) (lambda (_) #f))) labirinto)))
+
+; Função auxiliar para atualizar uma lista em um índice específico
+(define (atualizar-lista lst idx novo-valor)
+  (if (= idx 0)
+      (cons novo-valor (cdr lst))
+      (cons (car lst) (atualizar-lista (cdr lst) (- idx 1) novo-valor))))
+
+; Função para marcar células como visitadas
+(define (marcar-células-visitadas posição)
+  (let ([linha (first posição)]
+        [coluna (second posição)])
+    (for ([dl (in-range -1 2)])
+      (for ([dc (in-range -1 2)])
+        (let ([nova-linha (+ linha dl)]
+              [nova-coluna (+ coluna dc)])
+          (when (and (>= nova-linha 0) (< nova-linha (length células-visitadas))
+                     (>= nova-coluna 0) (< nova-coluna (length (first células-visitadas))))
+            (let ([linha-atualizada (atualizar-lista (list-ref células-visitadas nova-linha) nova-coluna #t)])
+              (set! células-visitadas (atualizar-lista células-visitadas nova-linha linha-atualizada)))))))))
 
 
 ; Função principal para jogar uma fase
@@ -135,6 +163,7 @@
   (exibir-conteúdo-educativo índice-fase)
 
   (define labirinto-atual (list-ref labirintos índice-fase))
+  (inicializar-células-visitadas labirinto-atual)
   (define desafios-da-fase (list-ref desafios-posições índice-fase))
   (define posição-inicial (list-ref posições-iniciais índice-fase))
   (define posição-saída (list-ref posições-saída índice-fase))
