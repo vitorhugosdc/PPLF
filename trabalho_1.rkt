@@ -23,22 +23,33 @@
 
 ; Desafio resolvido para cada fase
 (define desafios-resolvidos (make-vector (length labirintos) #f))
+(define desafios-corretos (make-vector (length labirintos) 0))
+(define desafios-pulados (make-vector (length labirintos) 0))
+
+
+; Função para exibir o resumo do desempenho no final da fase
+(define (exibir-resumo-desempenho índice-fase)
+  (let ([acertos (vector-ref desafios-corretos índice-fase)]
+        [pulados (vector-ref desafios-pulados índice-fase)])
+    (display (format "Resumo da fase ~a: \nDesafios corretos: ~a \nDesafios pulados: ~a\n" índice-fase acertos pulados))))
 
 
 ; Função para o desafio de declaração de variáveis
 (define (desafio-declaracao-variaveis índice-fase)
-  (display "Desafio: Qual das seguintes opções é uma declaração de variável correta em Racket?\n")
-  (display "1) (define var 10)\n")
-  (display "2) (define (var 10))\n")
-  (display "3) (define var, 10)\n")
-  (display "4) define var 10\n")
-  (display "Digite o número da sua resposta: ")
+  (display "Desafio: Qual das seguintes opções é uma declaração de variável correta em Racket? Digite 'pular' para pular.\n")
+  (display "1) (define var 10)\n2) (define (var 10))\n3) (define var, 10)\n4) define var 10\n")
+  (display "Digite o número da sua resposta ou 'pular': ")
   (let ([resposta (read)])
     (cond
       [(equal? resposta 1)
        (begin
+         (vector-set! desafios-corretos índice-fase (add1 (vector-ref desafios-corretos índice-fase)))
          (vector-set! desafios-resolvidos índice-fase #t)
          (display "Resposta correta! Você pode continuar.\n"))]
+      [(string=? (format "~a" resposta) "pular")
+       (begin
+         (vector-set! desafios-pulados índice-fase (add1 (vector-ref desafios-pulados índice-fase)))
+         (display "Desafio pulado.\n"))]
       [else
        (display "Resposta incorreta. Tente novamente.\n")
        (desafio-declaracao-variaveis índice-fase)])))
@@ -85,18 +96,25 @@
 
 ; Função para o desafio de somar elementos de uma lista
 (define (desafio-soma-lista índice-fase)
-  (display "Desafio 2: Escreva a definição completa de uma função que some todos os elementos de uma lista.\n")
+  (display "Desafio 2: Escreva a definição completa de uma função que some todos os elementos de uma lista. Digite 'pular' para pular.\n")
   (display "Por favor, defina o cabeçalho da função como (define (soma-lista lst)... \n\n")
-  (let* ([definição-função (read)]
-         [contexto (make-base-namespace)])
-    (eval definição-função contexto)  ; Avalia a definição da função
-    (let ([função-soma-lista (eval 'soma-lista contexto)])  ; Recupera a função definida
-      (let ([resultado (função-soma-lista (list 1 2 3 4 5))])  ; Testa a função
-        (if (= resultado 15)
-            (begin
-              (vector-set! desafios-resolvidos índice-fase #t)
-              (display "Desafio resolvido! Você pode continuar.\n"))
-            (display "Resposta incorreta. Tente novamente.\n"))))))
+  (let* ([definição-função (read)])
+    (cond
+      [(string=? (format "~a" definição-função) "pular")
+       (begin
+         (vector-set! desafios-pulados índice-fase (add1 (vector-ref desafios-pulados índice-fase)))
+         (display "Desafio pulado.\n"))]
+      [else
+       (let* ([contexto (make-base-namespace)])
+         (eval definição-função contexto)  ; Avalia a definição da função
+         (let ([função-soma-lista (eval 'soma-lista contexto)])  ; Recupera a função definida
+           (let ([resultado (função-soma-lista (list 1 2 3 4 5))])  ; Testa a função
+             (if (= resultado 15)
+                 (begin
+                   (vector-set! desafios-corretos índice-fase (add1 (vector-ref desafios-corretos índice-fase)))
+                   (vector-set! desafios-resolvidos índice-fase #t)
+                   (display "Desafio resolvido! Você pode continuar.\n"))
+                 (display "Resposta incorreta. Tente novamente.\n")))))])))
 
 
 ; Lista de funções de desafio para cada fase
@@ -210,6 +228,7 @@
        (if (vector-ref desafios-resolvidos índice-fase)
            (if (< índice-fase (sub1 (length labirintos)))
                (begin
+                 (exibir-resumo-desempenho índice-fase)
                  (vector-set! desafios-resolvidos índice-fase #f)
                  (jogar-fase (add1 índice-fase)))
                (display "Parabéns! Você encontrou a saída e resolveu os desafios de todas as fases!\n"))
