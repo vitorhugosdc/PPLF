@@ -56,39 +56,49 @@
 
 ; Função para o desafio de soma com opção de dica
 (define (desafio-soma índice-fase)
-  (display "Desafio: Insira o corpo de uma função que some dois números ou digite '?' para uma dica.\n")
+  (display "Desafio: Insira o corpo de uma função que some dois números ou digite '?' para uma dica. Digite 'pular' para pular.\n")
   (display "Por exemplo, você pode digitar (+ x y).\n")
   (let* ([resposta (read)])
     (cond
-      [(equal? resposta '?)
-       (display "Dica: A função de soma em Racket é (+ x y), onde x e y são os números a serem somados.\n")
-       (desafio-soma índice-fase)]  ; Chama novamente a função desafio-soma após mostrar a dica
+      [(equal? resposta "?")
+       (begin
+         (display "Dica: A função de soma em Racket é (+ x y), onde x e y são os números a serem somados.\n")
+         (desafio-soma índice-fase))]
+      [(string=? (format "~a" resposta) "pular")
+       (begin
+         (vector-set! desafios-pulados índice-fase (add1 (vector-ref desafios-pulados índice-fase)))
+         (display "Desafio pulado.\n"))]
       [else
        (let* ([contexto (make-base-namespace)]
               [função-soma (eval `(lambda (x y) ,resposta) contexto)])
          (let ([resultado (função-soma 2 3)])
            (if (= resultado 5)
                (begin
+                 (vector-set! desafios-corretos índice-fase (add1 (vector-ref desafios-corretos índice-fase)))
                  (vector-set! desafios-resolvidos índice-fase #t)
                  (display "Desafio resolvido! Você pode continuar.\n"))
                (display "Resposta incorreta. Tente novamente.\n"))))])))
 
-
-; Função para o desafio de multiplicação (segunda fase)
+; Função para o desafio de multiplicação (primeira fase)
 (define (desafio-multiplicação índice-fase)
-  (display "Desafio 2: Insira o corpo de uma função que multiplique dois números ou digite '?' para uma dica.\n")
+  (display "Desafio 2: Insira o corpo de uma função que multiplique dois números ou digite '?' para uma dica. Digite 'pular' para pular.\n")
   (display "Por exemplo, você pode digitar (* x y).\n")
   (let* ([resposta (read)])
     (cond
-      [(equal? resposta '?)
+      [(equal? resposta "?")
        (display "Dica: A função de multiplicação em Racket é (* x y), onde x e y são os números a serem multiplicados.\n")
        (desafio-multiplicação índice-fase)]  ; Chama novamente após mostrar a dica
+      [(string=? (format "~a" resposta) "pular")
+       (begin
+         (vector-set! desafios-pulados índice-fase (add1 (vector-ref desafios-pulados índice-fase)))
+         (display "Desafio pulado.\n"))]
       [else
        (let* ([contexto (make-base-namespace)]
               [função-multiplicação (eval `(lambda (x y) ,resposta) contexto)])
          (let ([resultado (função-multiplicação 2 3)])
            (if (= resultado 6)
                (begin
+                 (vector-set! desafios-corretos índice-fase (add1 (vector-ref desafios-corretos índice-fase)))
                  (vector-set! desafios-resolvidos índice-fase #t)
                  (display "Desafio resolvido! Você pode continuar.\n"))
                (display "Resposta incorreta. Tente novamente.\n"))))])))
