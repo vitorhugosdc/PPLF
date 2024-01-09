@@ -97,7 +97,8 @@
             [(equal? direção 'w) (list (- linha 1) coluna)]
             [(equal? direção 's) (list (+ linha 1) coluna)]
             [(equal? direção 'd) (list linha (+ coluna 1))]
-            [(equal? direção 'a) (list linha (- coluna 1))])]
+            [(equal? direção 'a) (list linha (- coluna 1))]
+            [else posição])]  ; Mantém a posição atual para entradas inválidas
          [nova-linha (first nova-posição)]
          [nova-coluna (second nova-posição)])
     (if (and (>= nova-linha 0) (< nova-linha (length labirinto))
@@ -105,6 +106,7 @@
              (not (equal? (list-ref (list-ref labirinto nova-linha) nova-coluna) "#")))
         nova-posição
         posição)))
+
 
 ; Associação de posições de desafios e suas funções correspondentes para cada fase;
 (define desafios-posições
