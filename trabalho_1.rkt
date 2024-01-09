@@ -61,7 +61,7 @@
   (display "Por exemplo, você pode digitar (+ x y).\n")
   (let* ([resposta (read)])
     (cond
-      [(equal? resposta "?")
+      [(equal? resposta '?)
        (begin
          (display "Dica: A função de soma em Racket é (+ x y), onde x e y são os números a serem somados.\n")
          (desafio-soma índice-fase))]
@@ -87,7 +87,7 @@
   (display "Por exemplo, você pode digitar (* x y).\n")
   (let* ([resposta (read)])
     (cond
-      [(equal? resposta "?")
+      [(equal? resposta '?)
        (display "Dica: A função de multiplicação em Racket é (* x y), onde x e y são os números a serem multiplicados.\n")
        (desafio-multiplicação índice-fase)]  ; Chama novamente após mostrar a dica
       [(string=? (format "~a" resposta) "pular")
@@ -182,12 +182,20 @@
 (define conteúdos-educativos
   (list
     (lambda ()
-      (display "Bem-vindo à fase 1!\nNesta fase, você aprenderá sobre soma e multiplicação básica.\n\n")
-      (display "A soma é uma operação que adiciona números. Por exemplo, 2 + 3 é igual a 5.\n")
-      (display "A multiplicação é uma operação que multiplica números. Por exemplo, 2 * 3 é igual a 6.\n\n"))
+      (display "Bem-vindo à Fase 1: Fundamentos em Racket!\n\n")
+      (display "Nesta fase, você vai explorar os conceitos básicos de programação em Racket, começando com variáveis e operações matemáticas simples.\n\n")
+      (display "1. Variáveis em Racket:\n")
+      (display "   Em Racket, uma variável é um nome que você atribui a um valor. Você pode criar uma variável usando a forma '(define nome valor)'.\n")
+      (display "   Por exemplo, '(define x 10)' cria uma variável chamada 'x' com o valor 10.\n\n")
+      (display "2. Soma:\n")
+      (display "   A soma é uma operação que adiciona dois ou mais números. Em Racket, você usa '(+ num1 num2 ...)' para somar números.\n")
+      (display "   Por exemplo, '(+ 2 3)' resulta em 5, que é a soma de 2 e 3.\n\n")
+      (display "3. Multiplicação:\n")
+      (display "   A multiplicação combina números multiplicando-os. Em Racket, você faz isso com '(* num1 num2 ...)' .\n")
+      (display "   Por exemplo, '(* 2 3)' resulta em 6, que é o produto de 2 e 3.\n\n")
+      (display "Pronto para colocar esses conceitos em prática? Avance pelo labirinto e enfrente os desafios!\n"))
     (lambda ()
       (display "Bem-vindo à fase 2!\nNesta fase, você aprenderá sobre outras operações matemáticas...\n\n"))
-
   ))
 
 ; Função para exibir conteúdo educativo
