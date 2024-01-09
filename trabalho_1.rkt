@@ -24,33 +24,45 @@
 ; Desafio resolvido para cada fase
 (define desafios-resolvidos (make-vector (length labirintos) #f))
 
-; Função para o desafio de soma
+; Função para o desafio de soma com opção de dica
 (define (desafio-soma índice-fase)
-  (display "Desafio: Insira o corpo de uma função que some dois números.\n")
+  (display "Desafio: Insira o corpo de uma função que some dois números ou digite '?' para uma dica.\n")
   (display "Por exemplo, você pode digitar (+ x y).\n")
-  (let* ([resposta (read)]
-         [contexto (make-base-namespace)]
-         [função-soma (eval `(lambda (x y) ,resposta) contexto)])
-    (let ([resultado (função-soma 2 3)])
-      (if (= resultado 5)
-          (begin
-            (vector-set! desafios-resolvidos índice-fase #t)
-            (display "Desafio resolvido! Você pode continuar.\n"))
-          (display "Resposta incorreta. Tente novamente.\n")))))
+  (let* ([resposta (read)])
+    (cond
+      [(equal? resposta '?)
+       (display "Dica: A função de soma em Racket é (+ x y), onde x e y são os números a serem somados.\n")
+       (desafio-soma índice-fase)]  ; Chama novamente a função desafio-soma após mostrar a dica
+      [else
+       (let* ([contexto (make-base-namespace)]
+              [função-soma (eval `(lambda (x y) ,resposta) contexto)])
+         (let ([resultado (função-soma 2 3)])
+           (if (= resultado 5)
+               (begin
+                 (vector-set! desafios-resolvidos índice-fase #t)
+                 (display "Desafio resolvido! Você pode continuar.\n"))
+               (display "Resposta incorreta. Tente novamente.\n"))))])))
+
 
 ; Função para o desafio de multiplicação (segunda fase)
 (define (desafio-multiplicação índice-fase)
-  (display "Desafio 2: Insira o corpo de uma função que multiplique dois números.\n")
+  (display "Desafio 2: Insira o corpo de uma função que multiplique dois números ou digite '?' para uma dica.\n")
   (display "Por exemplo, você pode digitar (* x y).\n")
-  (let* ([resposta (read)]
-         [contexto (make-base-namespace)]
-         [função-multiplicação (eval `(lambda (x y) ,resposta) contexto)])
-    (let ([resultado (função-multiplicação 2 3)])
-      (if (= resultado 6)
-          (begin
-            (vector-set! desafios-resolvidos índice-fase #t)
-            (display "Desafio resolvido! Você pode continuar.\n"))
-          (display "Resposta incorreta. Tente novamente.\n")))))
+  (let* ([resposta (read)])
+    (cond
+      [(equal? resposta '?)
+       (display "Dica: A função de multiplicação em Racket é (* x y), onde x e y são os números a serem multiplicados.\n")
+       (desafio-multiplicação índice-fase)]  ; Chama novamente após mostrar a dica
+      [else
+       (let* ([contexto (make-base-namespace)]
+              [função-multiplicação (eval `(lambda (x y) ,resposta) contexto)])
+         (let ([resultado (função-multiplicação 2 3)])
+           (if (= resultado 6)
+               (begin
+                 (vector-set! desafios-resolvidos índice-fase #t)
+                 (display "Desafio resolvido! Você pode continuar.\n"))
+               (display "Resposta incorreta. Tente novamente.\n"))))])))
+
 
 ; Função para o desafio de somar elementos de uma lista
 (define (desafio-soma-lista índice-fase)
