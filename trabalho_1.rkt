@@ -49,7 +49,8 @@
       [(string=? (format "~a" resposta) "pular")
        (begin
          (vector-set! desafios-pulados índice-fase (add1 (vector-ref desafios-pulados índice-fase)))
-         (display "Desafio pulado.\n"))]
+         (display "Desafio pulado.\n")
+         (display "A declaração correta de uma variável em Racket é usando '(define var 10)'. Isso cria uma variável chamada 'var' com o valor 10.\n"))]
       [else
        (display "Resposta incorreta. Tente novamente.\n")
        (desafio-declaracao-variaveis índice-fase)])))
@@ -67,7 +68,8 @@
       [(string=? (format "~a" resposta) "pular")
        (begin
          (vector-set! desafios-pulados índice-fase (add1 (vector-ref desafios-pulados índice-fase)))
-         (display "Desafio pulado.\n"))]
+         (display "Desafio pulado.\n")
+         (display "A função correta para somar dois números em Racket é '(+ x y)', onde 'x' e 'y' são os números a serem somados.\n"))]
       [else
        (let* ([contexto (make-base-namespace)]
               [função-soma (eval `(lambda (x y) ,resposta) contexto)])
@@ -91,7 +93,8 @@
       [(string=? (format "~a" resposta) "pular")
        (begin
          (vector-set! desafios-pulados índice-fase (add1 (vector-ref desafios-pulados índice-fase)))
-         (display "Desafio pulado.\n"))]
+         (display "Desafio pulado.\n")
+         (display "A função correta para multiplicar dois números em Racket é '(* x y)', onde 'x' e 'y' são os números a serem multiplicados.\n"))]
       [else
        (let* ([contexto (make-base-namespace)]
               [função-multiplicação (eval `(lambda (x y) ,resposta) contexto)])
@@ -113,7 +116,8 @@
       [(string=? (format "~a" definição-função) "pular")
        (begin
          (vector-set! desafios-pulados índice-fase (add1 (vector-ref desafios-pulados índice-fase)))
-         (display "Desafio pulado.\n"))]
+         (display "Desafio pulado.\n")
+         (display "Uma forma de somar todos os elementos de uma lista em Racket é definir uma função recursiva que soma o primeiro elemento (car lst) com a soma do restante da lista (cdr lst).\n"))]
       [else
        (let* ([contexto (make-base-namespace)])
          (eval definição-função contexto)  ; Avalia a definição da função
