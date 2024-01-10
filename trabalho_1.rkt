@@ -20,16 +20,28 @@
      ("#" " " "#" "#" "#" "#" "#" "#" " " "#")
      ("#" " " " " " " " " "#" " " " " "#" "#")
      ("#" "#" "#" " " "#" "#" " " "#" "#" "#")
-     ("#" " " " " " " " " " " "D" "S" "#" "#")
+     ("#" " " " " " " " " " " " " "S" "#" "#")
      ("#" " " "#" "#" "#" " " "#" "#" " " "#")
      ("#" " " " " "D" " " " " " " " " "#" "#")
      ("#" "#" "#" "#" "#" "#" "#" " " " " "#")
-     ("#" "#" "#" "#" "#" "#" "#" "#" "#" "#"))))
+     ("#" "#" "#" "#" "#" "#" "#" "#" "#" "#"))
+    '(("#" "#" "#" "#" "#" "#" "#" "#" "#" "#" "#" "#")
+     ("#" " " " " " " "D" " " " " " " "#" "#" "#" "#")
+     ("#" " " "#" "#" "#" "#" "#" "#" " " "#" "#" "#")
+     ("#" " " " " " " " " "#" " " " " "#" "#" "#" "#")
+     ("#" "#" "#" " " "#" "#" " " "#" "#" "#" "#" "#")
+     ("#" " " " " " " " " " " " " "S" "#" "#" "#" "#")
+     ("#" " " "#" "#" "#" " " "#" "#" " " "#" "#" "#")
+     ("#" " " " " "D" " " " " " " " " "#" "#" "#" "#")
+     ("#" "#" "#" "#" "#" "#" "#" " " " " "#" "#" "#")
+     ("#" "#" "#" "#" "#" "#" "#" "#" "#" "#" "#" "#")
+     ("#" "#" "#" "#" "#" "#" "#" "#" "#" "#" "#" "#")
+     ("#" "#" "#" "#" "#" "#" "#" "#" "#" "#" "#" "#"))))
 
 
 ; Definição das posições iniciais e de saída para cada fase
-(define posições-iniciais '((1 1) (1 1) (1 1)))  ; Posição inicial para todas as fases
-(define posições-saída '((3 5) (3 4) (5 8)))     ; Posição de saída para a terceira fase
+(define posições-iniciais '((1 1) (1 1) (1 1) (1 1)))  ; Posição inicial para cada fase
+(define posições-saída '((3 5) (3 4) (5 7) (5 7)))     ; Posição de saída de cada fase
 
 
 ; Desafio resolvido para cada fase
@@ -170,7 +182,39 @@
                    (vector-set! desafios-corretos índice-fase (add1 (vector-ref desafios-corretos índice-fase)))
                    (vector-set! desafios-resolvidos índice-fase #t)
                    (display "Desafio resolvido! Você pode continuar.\n"))
-                 (display "Resposta incorreta. Tente novamente.\n")))))])))
+                   (display "Resposta incorreta. Tente novamente.\n")))))])))
+
+(define (desafio-struct índice-fase)
+  (display "Desafio: Estruturas (Structs) em Programação\n")
+  (display "Considere uma struct chamada 'Carro', que representa informações sobre carros. A struct 'Carro' inclui 'marca', 'modelo', 'ano' e 'cor'. Como criar uma nova instância e acessar um de seus campos?\n\n")
+
+  (display "1) (define meuCarro (make-Carro \"Ford\" \"Mustang\" 2021 \"Vermelho\")) (Carro-modelo meuCarro)\n")
+  (display "2) (define meuCarro (Carro \"Ford\" \"Mustang\" 2021 \"Vermelho\")) (get-modelo meuCarro)\n")
+  (display "3) (define meuCarro (new Carro(\"Ford\", \"Mustang\", 2021, \"Vermelho\"))) meuCarro.getModelo()\n")
+  (display "4) (define meuCarro (struct Carro \"Ford\" \"Mustang\" 2021 \"Vermelho\")) (meuCarro 'modelo)\n")
+  (display "Digite '?' para uma dica ou 'pular' para pular este desafio.\n")
+  (display "Escolha a opção correta (1, 2, 3, 4, ?, pular): ")
+
+  (let* ([resposta (read)])
+    (cond
+      [(equal? resposta 1)
+       (begin
+         (vector-set! desafios-corretos índice-fase (add1 (vector-ref desafios-corretos índice-fase)))
+         (vector-set! desafios-resolvidos índice-fase #t)
+         (display "Resposta correta! A opção 1 é a maneira correta de criar uma instância de 'Carro' e acessar um campo.\n"))]
+      [(equal? resposta '?)
+       (begin
+         (display "Dica: Em Racket, structs são criadas usando 'make-StructName' e os campos são acessados com 'StructName-fieldName'.\n")
+         (desafio-struct índice-fase))]
+      [(string=? (format "~a" resposta) "pular")
+       (begin
+         (vector-set! desafios-pulados índice-fase (add1 (vector-ref desafios-pulados índice-fase)))
+         (display "Desafio pulado. A resposta correta era a opção 1.\n"))]
+      [else
+       (begin
+         (display "Resposta incorreta. Tente novamente.\n")
+         (desafio-struct índice-fase))])))
+
 
 ; Função para o desafio de somar elementos de uma lista
 (define (desafio-soma-lista índice-fase)
@@ -252,7 +296,7 @@
 
 ; Lista de funções de desafio para cada fase
 
-(define desafios (list desafio-soma desafio-multiplicação desafio-declaracao-variaveis desafio-soma-lista desafio-condicionais desafio-maximo desafio-map desafio-filter))
+(define desafios (list desafio-soma desafio-multiplicação desafio-declaracao-variaveis desafio-soma-lista desafio-condicionais desafio-maximo desafio-map desafio-filter desafio-struct))
 
 
 ; Função para mostrar o labirinto com neblina de guerra
@@ -302,7 +346,9 @@
           (cons '(3 3) desafio-maximo))
     ; Fase 3
     (list (cons '(1 4) desafio-soma-lista)
-          (cons '(7 3) desafio-map)
+          (cons '(7 3) desafio-struct))
+    ; Fase 4
+    (list (cons '(7 3) desafio-map)
           (cons '(5 6) desafio-filter))
   ))
 
@@ -334,6 +380,18 @@
       (display "Está pronto para mergulhar nessas estruturas de controle e desvendar os desafios? Avance e boa sorte!\n"))
     (lambda ()
      (display "Bem-vindo à Fase 3: Coleções em Racket!\n\n")
+      (display "Nesta fase, você irá explorar o poderoso conceito de coleções em Racket, com ênfase em listas, e as funções 'map' e 'filter'.\n\n")
+      (display "1. Listas:\n")
+      (display "   As listas são uma forma fundamental de armazenar coleções de elementos em Racket. Você pode criar listas usando a notação '(elemento1 elemento2 ...)', e elas podem ser manipuladas de várias maneiras.\n\n")
+      (display "2. Função Map:\n")
+      (display "   A função 'map' é usada para aplicar uma função a cada elemento de uma lista, retornando uma nova lista com os resultados. É uma forma eficiente de transformar coleções.\n")
+      (display "   Exemplo: '(map add1 (list 1 2 3))' retorna '(2 3 4)'.\n\n")
+      (display "3. Função Filter:\n")
+      (display "   A função 'filter' permite filtrar elementos de uma lista com base em um critério definido. Ela retorna uma nova lista contendo apenas os elementos que satisfazem a condição.\n")
+      (display "   Exemplo: '(filter odd? (list 1 2 3 4 5))' retorna '(1 3 5)', que são os números ímpares da lista.\n\n")
+      (display "Pronto para explorar e manipular coleções em Racket? Avance pelo labirinto e enfrente os desafios!\n"))
+    (lambda ()
+     (display "Bem-vindo à Fase 4: Coleções em Racket!\n\n")
       (display "Nesta fase, você irá explorar o poderoso conceito de coleções em Racket, com ênfase em listas, e as funções 'map' e 'filter'.\n\n")
       (display "1. Listas:\n")
       (display "   As listas são uma forma fundamental de armazenar coleções de elementos em Racket. Você pode criar listas usando a notação '(elemento1 elemento2 ...)', e elas podem ser manipuladas de várias maneiras.\n\n")
