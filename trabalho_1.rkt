@@ -5,7 +5,7 @@
 ; Definição dos labirintos para cada fase
 (define labirintos
   (list
-    '(("#" "#" "#" "#" "#" "#" "#") ;posição inicial é (0,0)
+    '(("#" "#" "#" "#" "#" "#" "#") ;posição inicial da lista é (0,0)
       ("#" " " "D" " " "D" "#" "#")
       ("#" "D" "#" "#" " " " " "#")
       ("#" " " "#" " " " " "S" "#")
@@ -14,12 +14,23 @@
       ("#" " " "D" " " "#" " " "#")
       ("#" "#" "#" " " "#" " " "#")
       ("#" " " " " "D" "S" " " "#")
-      ("#" "#" "#" "#" "#" "#" "#"))))
+      ("#" "#" "#" "#" "#" "#" "#"))
+    '(("#" "#" "#" "#" "#" "#" "#" "#" "#" "#")
+     ("#" " " " " " " "D" " " " " " " "#" "#")
+     ("#" " " "#" "#" "#" "#" "#" "#" " " "#")
+     ("#" " " " " " " " " "#" " " " " "#" "#")
+     ("#" "#" "#" " " "#" "#" " " "#" "#" "#")
+     ("#" " " " " " " " " " " "D" "S" "#" "#")
+     ("#" " " "#" "#" "#" " " "#" "#" " " "#")
+     ("#" " " " " "D" " " " " " " " " "#" "#")
+     ("#" "#" "#" "#" "#" "#" "#" " " " " "#")
+     ("#" "#" "#" "#" "#" "#" "#" "#" "#" "#"))))
 
 
 ; Definição das posições iniciais e de saída para cada fase
-(define posições-iniciais '((1 1) (1 1)))
-(define posições-saída '((3 5) (3 5)))
+(define posições-iniciais '((1 1) (1 1) (1 1)))  ; Posição inicial para todas as fases
+(define posições-saída '((3 5) (3 4) (5 8)))     ; Posição de saída para a terceira fase
+
 
 ; Desafio resolvido para cada fase
 (define desafios-resolvidos (make-vector (length labirintos) #f))
@@ -184,10 +195,52 @@
                    (display "Desafio resolvido! Você pode continuar.\n"))
                  (display "Resposta incorreta. Tente novamente.\n")))))])))
 
+(define (desafio-map índice-fase)
+  (display "Desafio: Escreva uma função usando 'map' que some 1 a cada elemento de uma lista. Digite 'pular' para pular.\n")
+  (display "Por exemplo, você pode escrever '(map add1 lst)'.\n")
+  (display "Por favor, defina o cabeçalho da função como (define (mapeamento lst)... \n\n")
+  (let* ([definição-função (read)])
+    (cond
+      [(string=? (format "~a" definição-função) "pular")
+       (begin
+         (vector-set! desafios-pulados índice-fase (add1 (vector-ref desafios-pulados índice-fase)))
+         (display "Desafio pulado. Uma solução seria usar a função 'map' para aplicar 'add1' a cada elemento da lista.\n"))]
+      [else
+       (let* ([contexto (make-base-namespace)])
+         (eval definição-função contexto)
+         (let ([função-map (eval 'mapeamento contexto)])
+           (let ([resultado (função-map (list 1 2 3))])
+             (if (equal? resultado (list 2 3 4))
+                 (begin
+                   (vector-set! desafios-corretos índice-fase (add1 (vector-ref desafios-corretos índice-fase)))
+                   (display "Desafio resolvido! Você pode continuar.\n"))
+                 (display "Resposta incorreta. Tente novamente.\n")))))])))
+
+(define (desafio-filter índice-fase)
+  (display "Desafio: Escreva uma função usando 'filter' que selecione apenas os números pares de uma lista. Digite 'pular' para pular.\n")
+  (display "Por exemplo, você pode escrever '(filter even? lst)'.\n")
+  (display "Por favor, defina o cabeçalho da função como (define (filtragem lst)... \n\n")
+  (let* ([definição-função (read)])
+    (cond
+      [(string=? (format "~a" definição-função) "pular")
+       (begin
+         (vector-set! desafios-pulados índice-fase (add1 (vector-ref desafios-pulados índice-fase)))
+         (display "Desafio pulado. Uma solução seria usar a função 'filter' para selecionar apenas os números pares da lista.\n"))]
+      [else
+       (let* ([contexto (make-base-namespace)])
+         (eval definição-função contexto)
+         (let ([função-filter (eval 'filtragem contexto)])
+           (let ([resultado (função-filter (list 1 2 3 4 5))])
+             (if (equal? resultado (list 2 4))
+                 (begin
+                   (vector-set! desafios-corretos índice-fase (add1 (vector-ref desafios-corretos índice-fase)))
+                   (display "Desafio resolvido! Você pode continuar.\n"))
+                 (display "Resposta incorreta. Tente novamente.\n")))))])))
+
 
 ; Lista de funções de desafio para cada fase
 
-(define desafios (list desafio-soma desafio-multiplicação desafio-declaracao-variaveis desafio-soma-lista desafio-condicionais desafio-maximo))
+(define desafios (list desafio-soma desafio-multiplicação desafio-declaracao-variaveis desafio-soma-lista desafio-condicionais desafio-maximo desafio-map desafio-filter))
 
 
 ; Função para mostrar o labirinto com neblina de guerra
@@ -228,12 +281,17 @@
 ; Definição das posições de desafios e suas funções correspondentes para cada fase
 (define desafios-posições
   (list
-    (list (cons '(1 2) desafio-soma)  ; Fase 1
+     ; Fase 1
+    (list (cons '(1 2) desafio-soma)
           (cons '(1 4) desafio-multiplicação)
           (cons '(2 1) desafio-declaracao-variaveis))
-    (list (cons '(1 2) desafio-condicionais) ;Fase 2
-          (cons '(2 2) desafio-soma-lista) ; mudar esse de fase depois
-          (cons '(3 3) desafio-maximo)) 
+     ; Fase 2
+    (list (cons '(1 2) desafio-condicionais)
+          (cons '(3 3) desafio-maximo))
+    ; Fase 3
+    (list (cons '(1 4) desafio-soma-lista)
+          (cons '(7 3) desafio-map)
+          (cons '(5 6) desafio-filter))
   ))
 
 ; Conteúdos educativos para cada fase
@@ -261,7 +319,19 @@
       (display "2. Loops (for, while):\n")
       (display "   Loops são usados para executar um bloco de código repetidamente. Em Racket, você pode usar 'for' ou estruturas similares para criar loops.\n")
       (display "   Exemplo: '(for ([i (in-range 0 5)]) (display i))' irá imprimir números de 0 a 4.\n\n")
-      (display "Está pronto para mergulhar nessas estruturas de controle e desvendar os desafios? Avance e boa sorte!\n"))))
+      (display "Está pronto para mergulhar nessas estruturas de controle e desvendar os desafios? Avance e boa sorte!\n"))
+    (lambda ()
+     (display "Bem-vindo à Fase 3: Coleções em Racket!\n\n")
+      (display "Nesta fase, você irá explorar o poderoso conceito de coleções em Racket, com ênfase em listas, e as funções 'map' e 'filter'.\n\n")
+      (display "1. Listas:\n")
+      (display "   As listas são uma forma fundamental de armazenar coleções de elementos em Racket. Você pode criar listas usando a notação '(elemento1 elemento2 ...)', e elas podem ser manipuladas de várias maneiras.\n\n")
+      (display "2. Função Map:\n")
+      (display "   A função 'map' é usada para aplicar uma função a cada elemento de uma lista, retornando uma nova lista com os resultados. É uma forma eficiente de transformar coleções.\n")
+      (display "   Exemplo: '(map add1 (list 1 2 3))' retorna '(2 3 4)'.\n\n")
+      (display "3. Função Filter:\n")
+      (display "   A função 'filter' permite filtrar elementos de uma lista com base em um critério definido. Ela retorna uma nova lista contendo apenas os elementos que satisfazem a condição.\n")
+      (display "   Exemplo: '(filter odd? (list 1 2 3 4 5))' retorna '(1 3 5)', que são os números ímpares da lista.\n\n")
+      (display "Pronto para explorar e manipular coleções em Racket? Avance pelo labirinto e enfrente os desafios!\n"))))
 
 ; Função para exibir conteúdo educativo
 (define (exibir-conteúdo-educativo índice-fase)
