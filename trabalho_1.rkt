@@ -174,10 +174,14 @@
 
 ; Função para o desafio de somar elementos de uma lista
 (define (desafio-soma-lista índice-fase)
-  (display "Desafio 2: Escreva a definição completa de uma função que some todos os elementos de uma lista. Digite 'pular' para pular.\n")
+  (display "Desafio 2: Escreva a definição completa de uma função que some todos os elementos de uma lista. Digite '?' para uma dica ou 'pular' para pular.\n")
   (display "Por favor, defina o cabeçalho da função como (define (soma-lista lst)... \n\n")
   (let* ([definição-função (read)])
     (cond
+      [(equal? definição-função '?)
+       (begin
+         (display "Dica: Você pode usar uma função recursiva para somar os elementos. Comece somando o primeiro elemento da lista (car lst) com o resultado da soma do restante (cdr lst).\n")
+         (desafio-soma-lista índice-fase))]
       [(string=? (format "~a" definição-função) "pular")
        (begin
          (vector-set! desafios-pulados índice-fase (add1 (vector-ref desafios-pulados índice-fase)))
@@ -196,11 +200,15 @@
                  (display "Resposta incorreta. Tente novamente.\n")))))])))
 
 (define (desafio-map índice-fase)
-  (display "Desafio: Escreva uma função usando 'map' que some 1 a cada elemento de uma lista. Digite 'pular' para pular.\n")
+  (display "Desafio: Escreva uma função usando 'map' que some 1 a cada elemento de uma lista. Digite '?' para uma dica ou 'pular' para pular.\n")
   (display "Por exemplo, você pode escrever '(map add1 lst)'.\n")
   (display "Por favor, defina o cabeçalho da função como (define (mapeamento lst)... \n\n")
   (let* ([definição-função (read)])
     (cond
+      [(equal? definição-função '?)
+       (begin
+         (display "Dica: A função 'map' aplica uma função a cada elemento de uma lista. Você pode usar 'map' com a função 'add1' para somar 1 a cada elemento.\n")
+         (desafio-map índice-fase))]
       [(string=? (format "~a" definição-função) "pular")
        (begin
          (vector-set! desafios-pulados índice-fase (add1 (vector-ref desafios-pulados índice-fase)))
@@ -217,11 +225,15 @@
                  (display "Resposta incorreta. Tente novamente.\n")))))])))
 
 (define (desafio-filter índice-fase)
-  (display "Desafio: Escreva uma função usando 'filter' que selecione apenas os números pares de uma lista. Digite 'pular' para pular.\n")
+  (display "Desafio: Escreva uma função usando 'filter' que selecione apenas os números pares de uma lista. Digite '?' para uma dica ou 'pular' para pular.\n")
   (display "Por exemplo, você pode escrever '(filter even? lst)'.\n")
   (display "Por favor, defina o cabeçalho da função como (define (filtragem lst)... \n\n")
   (let* ([definição-função (read)])
     (cond
+      [(equal? definição-função '?)
+       (begin
+         (display "Dica: A função 'filter' seleciona elementos de uma lista que satisfazem um predicado. Use 'even?' como predicado para selecionar números pares.\n")
+         (desafio-filter índice-fase))]
       [(string=? (format "~a" definição-função) "pular")
        (begin
          (vector-set! desafios-pulados índice-fase (add1 (vector-ref desafios-pulados índice-fase)))
