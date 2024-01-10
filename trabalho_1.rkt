@@ -13,7 +13,7 @@
     '(("#" "#" "#" "#" "#" "#" "#")
       ("#" " " "D" " " "#" " " "#")
       ("#" "#" "#" " " "#" " " "#")
-      ("#" " " " " " " "S" " " "#")
+      ("#" " " " " "D" "S" " " "#")
       ("#" "#" "#" "#" "#" "#" "#"))))
 
 
@@ -133,6 +133,34 @@
              [else
               (display "Resposta incorreta. Tente novamente.\n")])))])))
 
+; Função para o desafio de seleção de máximo
+(define (desafio-maximo índice-fase)
+  (display "Desafio: Escreva uma função que receba dois números e retorne o maior deles. Digite '?' para uma dica ou 'pular' para pular.\n")
+  (display "Por favor, defina o cabeçalho da função como (define (maximo num1 num2)... \n\n")
+  (let* ([definição-função (read)])
+    (cond
+      [(equal? definição-função '?)
+       (begin
+         (display "Dica: Use a expressão '(if (> num1 num2) num1 num2)' para retornar o maior dos dois números.\n")
+         (desafio-maximo índice-fase))]
+      [(string=? (format "~a" definição-função) "pular")
+       (begin
+         (vector-set! desafios-pulados índice-fase (add1 (vector-ref desafios-pulados índice-fase)))
+         (display "Desafio pulado. Uma solução seria usar o if para comparar os dois números e retornar o maior.\n"))]
+      [else
+       (let* ([contexto (make-base-namespace)])
+         (eval definição-função contexto)  ; Avalia a definição da função
+         (let ([função-maximo (eval 'maximo contexto)])  ; Recupera a função definida
+           (let ([resultado1 (função-maximo 3 5)]
+                 [resultado2 (função-maximo -2 1)]
+                 [resultado3 (função-maximo 7 7)])
+             (if (and (= resultado1 5) (= resultado2 1) (= resultado3 7))
+                 (begin
+                   (vector-set! desafios-corretos índice-fase (add1 (vector-ref desafios-corretos índice-fase)))
+                   (vector-set! desafios-resolvidos índice-fase #t)
+                   (display "Desafio resolvido! Você pode continuar.\n"))
+                 (display "Resposta incorreta. Tente novamente.\n")))))])))
+
 ; Função para o desafio de somar elementos de uma lista
 (define (desafio-soma-lista índice-fase)
   (display "Desafio 2: Escreva a definição completa de uma função que some todos os elementos de uma lista. Digite 'pular' para pular.\n")
@@ -159,7 +187,7 @@
 
 ; Lista de funções de desafio para cada fase
 
-(define desafios (list desafio-soma desafio-multiplicação desafio-declaracao-variaveis desafio-soma-lista desafio-condicionais))
+(define desafios (list desafio-soma desafio-multiplicação desafio-declaracao-variaveis desafio-soma-lista desafio-condicionais desafio-maximo))
 
 
 ; Função para mostrar o labirinto com neblina de guerra
@@ -204,7 +232,8 @@
           (cons '(1 4) desafio-multiplicação)
           (cons '(2 1) desafio-declaracao-variaveis))
     (list (cons '(1 2) desafio-condicionais) ;Fase 2
-          (cons '(2 2) desafio-soma-lista)) ; mudar esse de fase depois
+          (cons '(2 2) desafio-soma-lista) ; mudar esse de fase depois
+          (cons '(3 3) desafio-maximo)) 
   ))
 
 ; Conteúdos educativos para cada fase
