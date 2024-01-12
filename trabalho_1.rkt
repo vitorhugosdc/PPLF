@@ -41,7 +41,7 @@
      ("#" " " " " " " "D" " " " " " " "#" "#")
      ("#" " " "#" "#" "#" "#" "#" "#" " " "#")
      ("#" " " " " " " " " "#" " " " " "#" "#")
-     ("#" "#" "#" " " "#" "#" " " "#" "#" "#")
+     ("#" "D" "#" " " "#" "#" " " "#" "#" "#")
      ("#" " " " " " " " " "D" " " "S" "#" "#")
      ("#" " " "#" "#" "#" " " "#" "#" " " "#")
      ("#" " " " " "D" " " " " " " " " "#" "#")
@@ -264,6 +264,38 @@
          (display "Resposta incorreta. Tente novamente.\n")
          (desafio-struct índice-fase))])))
 
+(define (desafio-struct-ponto índice-fase)
+  (display "Desafio: Trabalhando com a Struct 'ponto' em Racket\n")
+  (display "Considere a seguinte definição da struct 'ponto':\n")
+  (display "(define-struct ponto (x y))\n")
+  
+  (display "Qual das opções abaixo seria a maneira correta de calcular a distância de dois pontos da origem? identifique qual é o método correto de acesso de um ponto x e y de um ponto p\n")
+  (display "1) (define (distancia-origem p)\n (sqrt (+ (sqr (p 'x)) (sqr (p 'y)))))\n")
+  (display "2) (define (distancia-origem p)\n (sqrt (+ (sqr (p.x)) (sqr (p.y)))))\n")
+  (display "3) (define (distancia-origem p)\n (sqrt (+ (sqr (ponto-x p)) (sqr (ponto-y p)))))\n")
+  (display "4) (define (distancia-origem p)\n (sqrt (+ (sqr (get-x p1)) (sqr (get-y p1)))))\n")
+  (display "Digite o número da sua resposta, '?' para uma dica ou 'pular': ")
+  
+  (let* ([resposta (read)])
+    (cond
+      [(equal? resposta 3)
+       (begin
+         (vector-set! desafios-corretos índice-fase (add1 (vector-ref desafios-corretos índice-fase)))
+         (vector-set! desafios-resolvidos índice-fase #t)
+         (display "Resposta correta! A opção 3 é a maneira correta de acessar a coordenada 'y' do ponto 'p1'.\n"))]
+      [(equal? resposta '?)
+       (begin
+         (display "Dica: Em Racket, o acesso a campos de uma struct é feito através do formato 'struct-campo'.\n")
+         (desafio-struct-ponto índice-fase))]
+      [(string=? (format "~a" resposta) "pular")
+       (begin
+         (vector-set! desafios-pulados índice-fase (add1 (vector-ref desafios-pulados índice-fase)))
+         (display "Desafio pulado. A resposta correta era a opção 3.\n"))]
+      [else
+       (begin
+         (display "Resposta incorreta. Tente novamente.\n")
+         (desafio-struct-ponto índice-fase))])))
+
 
 ; Função para o desafio de somar elementos de uma lista
 (define (desafio-soma-lista índice-fase)
@@ -372,7 +404,7 @@
 
 ; Lista de funções de desafio para cada fase
 
-(define desafios (list desafio-soma desafio-multiplicação desafio-declaracao-variaveis desafio-soma-lista desafio-condicionais desafio-maximo desafio-map desafio-filter desafio-struct desafio-operadores-lógicos desafio-inverter-lista))
+(define desafios (list desafio-soma desafio-multiplicação desafio-declaracao-variaveis desafio-soma-lista desafio-condicionais desafio-maximo desafio-map desafio-filter desafio-struct desafio-operadores-lógicos desafio-inverter-lista desafio-struct-ponto))
 
 
 ; Função para mostrar o labirinto com neblina de guerra
@@ -422,8 +454,9 @@
           (cons '(3 3) desafio-maximo)
           (cons '(2 5) desafio-operadores-lógicos))
     ; Fase 3
-    (list (cons '(1 4) desafio-soma-lista)
+    (list (cons '(1 4) desafio-soma-lista)          
           (cons '(7 3) desafio-struct)
+          (cons '(4 1) desafio-struct-ponto)
           (cons '(5 5) desafio-inverter-lista))
     ; Fase 4
     (list (cons '(7 3) desafio-map)
