@@ -11,7 +11,7 @@
       [(= índice-fase 1) "2 - fundamentos-notas-de-aula.pdf"]
       [(= índice-fase 2) "3 - dados-compostos-notas-de-aula.pdf"]
       [(= índice-fase 3) "6 - funcoes-notas-de-aula.pdf"]
-      [else "documento-padrao.pdf"])) ; Caso padrão
+      [else "documento-padrao.pdf"]))
 
   (define os (system-type 'os))
   (define comando-abrir
@@ -22,12 +22,14 @@
       [else (error "Sistema operacional não suportado")]))
   (system comando-abrir))
 
-
+(define (limpar-console)
+  (for ([i (in-range 3)])
+    (newline)))
 
 ; Definição dos labirintos para cada fase
 (define labirintos
   (list
-    '(("#" "#" "#" "#" "#" "#" "#") ;posição inicial da lista é (0,0)
+    '(("#" "#" "#" "#" "#" "#" "#") ;posição inicial dos labirintos é (0,0)
       ("#" " " "D" " " "D" "#" "#")
       ("#" "D" "#" "#" " " " " "#")
       ("#" " " "#" " " " " "S" "#")
@@ -630,6 +632,7 @@
                (display "Parabéns! Você encontrou a saída e resolveu os desafios de todas as fases!\n"))
            (display "Você encontrou a saída, mas ainda há desafios a resolver.\n"))]
       [else
+       (limpar-console)
        (mostrar-labirinto labirinto-atual posição)
        (for-each (lambda (par-desafio-posição)
                    (let ([pos-desafio (car par-desafio-posição)]
