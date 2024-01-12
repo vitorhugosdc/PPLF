@@ -33,9 +33,9 @@
       ("#" " " "#" " " " " "S" "#")
       ("#" "#" "#" "#" "#" "#" "#"))
     '(("#" "#" "#" "#" "#" "#" "#")
-      ("#" " " "D" " " "#" " " "#")
-      ("#" "#" "#" " " "#" " " "#")
-      ("#" " " " " "D" "S" " " "#")
+      ("#" " " "D" " " "#" "S" "#")
+      ("#" "#" "#" " " "#" "D" "#")
+      ("#" " " " " "D" " " " " "#")
       ("#" "#" "#" "#" "#" "#" "#"))
     '(("#" "#" "#" "#" "#" "#" "#" "#" "#" "#")
      ("#" " " " " " " "D" " " " " " " "#" "#")
@@ -63,7 +63,7 @@
 
 ; Definição das posições iniciais e de saída para cada fase
 (define posições-iniciais '((1 1) (1 1) (1 1) (1 1)))  ; Posição inicial para cada fase
-(define posições-saída '((3 5) (3 4) (5 7) (5 7)))     ; Posição de saída de cada fase
+(define posições-saída '((3 5) (1 5) (5 7) (5 7)))     ; Posição de saída de cada fase
 
 
 ; Desafio resolvido para cada fase
@@ -206,6 +206,33 @@
                    (display "Desafio resolvido! Você pode continuar.\n"))
                    (display "Resposta incorreta. Tente novamente.\n")))))])))
 
+; Função para o desafio de operadores lógicos
+(define (desafio-operadores-lógicos índice-fase)
+  (display "Desafio: Determine o resultado da seguinte expressão lógica em Racket: '(and (> 5 3) (not (= 4 4)))'. Escolha a opção correta:\n")
+  (display "1) #t\n2) #f\nDigite o número da sua resposta, '?' para uma dica ou 'pular': ")
+  (let ([resposta (read)])
+    (cond
+      [(equal? resposta 1)
+       (begin
+         (display "Resposta incorreta. A expressão retorna #f. Tente novamente.\n")
+         (desafio-operadores-lógicos índice-fase))]
+      [(equal? resposta 2)
+       (begin
+         (vector-set! desafios-corretos índice-fase (add1 (vector-ref desafios-corretos índice-fase)))
+         (vector-set! desafios-resolvidos índice-fase #t)
+         (display "Resposta correta! A expressão retorna #f. Você pode continuar.\n"))]
+      [(equal? resposta '?)
+       (begin
+         (display "Dica: Lembre-se que em Racket, 'and' retorna #f se algum de seus operandos for #f. Além disso, 'not' inverte o valor booleano.\n")
+         (desafio-operadores-lógicos índice-fase))]
+      [(string=? (format "~a" resposta) "pular")
+       (begin
+         (vector-set! desafios-pulados índice-fase (add1 (vector-ref desafios-pulados índice-fase)))
+         (display "Desafio pulado. A resposta correta era '2) #f'.\n"))]
+      [else
+       (display "Entrada inválida. Tente novamente.\n")
+       (desafio-operadores-lógicos índice-fase)])))
+
 (define (desafio-struct índice-fase)
   (display "Desafio: Estruturas (Structs) em Programação\n")
   (display "Considere uma struct chamada 'Carro', que representa informações sobre carros. A struct 'Carro' inclui 'marca', 'modelo', 'ano' e 'cor'. Como criar uma nova instância e acessar um de seus campos?\n\n")
@@ -318,7 +345,7 @@
 
 ; Lista de funções de desafio para cada fase
 
-(define desafios (list desafio-soma desafio-multiplicação desafio-declaracao-variaveis desafio-soma-lista desafio-condicionais desafio-maximo desafio-map desafio-filter desafio-struct))
+(define desafios (list desafio-soma desafio-multiplicação desafio-declaracao-variaveis desafio-soma-lista desafio-condicionais desafio-maximo desafio-map desafio-filter desafio-struct desafio-operadores-lógicos))
 
 
 ; Função para mostrar o labirinto com neblina de guerra
@@ -365,7 +392,8 @@
           (cons '(2 1) desafio-declaracao-variaveis))
      ; Fase 2
     (list (cons '(1 2) desafio-condicionais)
-          (cons '(3 3) desafio-maximo))
+          (cons '(3 3) desafio-maximo)
+          (cons '(2 5) desafio-operadores-lógicos))
     ; Fase 3
     (list (cons '(1 4) desafio-soma-lista)
           (cons '(7 3) desafio-struct))
