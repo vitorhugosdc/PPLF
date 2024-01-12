@@ -75,6 +75,7 @@
 
 ; Função para exibir o resumo do desempenho no final da fase
 (define (exibir-resumo-desempenho índice-fase)
+  (limpar-console)
   (let ([acertos (vector-ref desafios-corretos índice-fase)]
         [pulados (vector-ref desafios-pulados índice-fase)])
     (display (format "Resumo da fase ~a: \nDesafios corretos: ~a \nDesafios pulados: ~a\n" índice-fase acertos pulados))))
@@ -82,6 +83,7 @@
 
 ; Função para o desafio de declaração de variáveis
 (define (desafio-declaracao-variaveis índice-fase)
+  (limpar-console)
   (display "Desafio: Qual das seguintes opções é uma declaração de variável correta em Racket? Digite 'pular' para pular.\n")
   (display "1) (define var 10)\n2) (define (var 10))\n3) (define var, 10)\n4) define var 10\n")
   (display "Digite o número da sua resposta ou 'pular': ")
@@ -103,6 +105,7 @@
 
 ; Função para o desafio de soma com opção de dica
 (define (desafio-soma índice-fase)
+  (limpar-console)
   (display "Desafio: Insira o corpo de uma função que some dois números ou digite '?' para uma dica. Digite 'pular' para pular.\n")
   (display "Por exemplo, você pode digitar (+ x y).\n")
   (let* ([resposta (read)])
@@ -129,6 +132,7 @@
 
 ; Função para o desafio de multiplicação (primeira fase)
 (define (desafio-multiplicação índice-fase)
+  (limpar-console)
   (display "Desafio 2: Insira o corpo de uma função que multiplique dois números ou digite '?' para uma dica. Digite 'pular' para pular.\n")
   (display "Por exemplo, você pode digitar (* x y).\n")
   (let* ([resposta (read)])
@@ -153,6 +157,7 @@
                (display "Resposta incorreta. Tente novamente.\n"))))])))
 
 (define (desafio-condicionais índice-fase)
+  (limpar-console)
   (display "Desafio: Defina uma função que verifica se um número é positivo, negativo ou zero. Digite '?' para uma dica ou 'pular' para pular.\n")
   (display "Por favor, defina o cabeçalho da função como (define (verificar-numero n)... \n\n")
   (let* ([definição-função (read)])
@@ -181,6 +186,7 @@
 
 ; Função para o desafio de seleção de máximo
 (define (desafio-maximo índice-fase)
+  (limpar-console)
   (display "Desafio: Escreva uma função que receba dois números e retorne o maior deles. Digite '?' para uma dica ou 'pular' para pular.\n")
   (display "Por favor, defina o cabeçalho da função como (define (maximo num1 num2)... \n\n")
   (let* ([definição-função (read)])
@@ -209,6 +215,7 @@
 
 ; Função para o desafio de operadores lógicos
 (define (desafio-operadores-lógicos índice-fase)
+  (limpar-console)
   (display "Desafio: Determine o resultado da seguinte expressão lógica em Racket: '(and (> 5 3) (not (= 4 4)))'. Escolha a opção correta:\n")
   (display "1) #t\n2) #f\nDigite o número da sua resposta, '?' para uma dica ou 'pular': ")
   (let ([resposta (read)])
@@ -235,9 +242,9 @@
        (desafio-operadores-lógicos índice-fase)])))
 
 (define (desafio-struct índice-fase)
+  (limpar-console)
   (display "Desafio: Estruturas (Structs) em Programação\n")
   (display "Considere uma struct chamada 'Carro', que representa informações sobre carros. A struct 'Carro' inclui 'marca', 'modelo', 'ano' e 'cor'. Como criar uma nova instância e acessar um de seus campos?\n\n")
-
   (display "1) (define meuCarro (make-Carro \"Ford\" \"Mustang\" 2021 \"Vermelho\")) (Carro-modelo meuCarro)\n")
   (display "2) (define meuCarro (Carro \"Ford\" \"Mustang\" 2021 \"Vermelho\")) (get-modelo meuCarro)\n")
   (display "3) (define meuCarro (new Carro(\"Ford\", \"Mustang\", 2021, \"Vermelho\"))) meuCarro.getModelo()\n")
@@ -266,6 +273,7 @@
          (desafio-struct índice-fase))])))
 
 (define (desafio-struct-ponto índice-fase)
+  (limpar-console)
   (display "Desafio: Trabalhando com a Struct 'ponto' em Racket\n")
   (display "Considere a seguinte definição da struct 'ponto':\n")
   (display "(define-struct ponto (x y))\n")
@@ -300,6 +308,7 @@
 
 ; Função para o desafio de somar elementos de uma lista
 (define (desafio-soma-lista índice-fase)
+  (limpar-console)
   (display "Desafio 2: Escreva a definição completa de uma função que some todos os elementos de uma lista. Digite '?' para uma dica ou 'pular' para pular.\n")
   (display "Por favor, defina o cabeçalho da função como (define (soma-lista lst)... \n\n")
   (let* ([definição-função (read)])
@@ -327,6 +336,7 @@
 
 ; Função para o desafio de inverter uma lista
 (define (desafio-inverter-lista índice-fase)
+  (limpar-console)
   (display "Desafio: Escreva a definição completa de uma função que inverte uma lista. Digite '?' para uma dica ou 'pular' para pular.\n")
   (display "Por favor, defina o cabeçalho da função como (define (inverter-lista lst)... \n\n")
   (let* ([definição-função (read)])
@@ -353,6 +363,7 @@
                  (display "Resposta incorreta. Tente novamente.\n")))))])))
 
 (define (desafio-map índice-fase)
+  (limpar-console)
   (display "Desafio: Escreva uma função usando 'map' que some 1 a cada elemento de uma lista. Digite '?' para uma dica ou 'pular' para pular.\n")
   (display "Por exemplo, você pode escrever '(map add1 lst)'.\n")
   (display "Por favor, defina o cabeçalho da função como (define (mapeamento lst)... \n\n")
@@ -378,6 +389,7 @@
                  (display "Resposta incorreta. Tente novamente.\n")))))])))
 
 (define (desafio-filter índice-fase)
+  (limpar-console)
   (display "Desafio: Escreva uma função usando 'filter' que selecione apenas os números pares de uma lista. Digite '?' para uma dica ou 'pular' para pular.\n")
   (display "Por exemplo, você pode escrever '(filter even? lst)'.\n")
   (display "Por favor, defina o cabeçalho da função como (define (filtragem lst)... \n\n")
@@ -403,6 +415,7 @@
                  (display "Resposta incorreta. Tente novamente.\n")))))])))
 
 (define (desafio-foldr índice-fase)
+  (limpar-console)
   (display "Desafio: Agregar Elementos de uma Lista com foldr\n")
   (display "Escreva uma função que use 'foldr' para somar os elementos pares e subtrair os ímpares de uma lista.\n")
   (display "Por exemplo, para a lista (2 3 4 5), a função deve retornar -2.\n")
@@ -432,6 +445,7 @@
 
 ; Função para o desafio de funções anônimas
 (define (desafio-funcoes-anonimas índice-fase)
+  (limpar-console)
   (display "Desafio: Funções Anônimas Avançadas em Racket\n")
   (display "Você precisa criar uma função anônima que recebe uma lista de números e retorna uma nova lista contendo o quadrado de cada número. Qual das seguintes expressões é correta?\n\n")
 
