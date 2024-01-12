@@ -49,7 +49,7 @@
      ("#" "#" "#" "#" "#" "#" "#" "#" "#" "#"))
     '(("#" "#" "#" "#" "#" "#" "#" "#" "#" "#" "#" "#")
      ("#" " " " " " " "D" " " " " " " "#" "#" "#" "#")
-     ("#" " " "#" "#" "#" "#" "#" "#" " " "#" " " "#")
+     ("#" " " "#" "#" "#" "#" "#" "D" " " "#" " " "#")
      ("#" " " " " " " " " "#" " " " " "#" "#" "#" "#")
      ("#" "#" "#" " " "#" "#" " " "#" "#" " " "#" "#")
      ("#" " " " " " " "D" " " " " " " "#" "#" "#" "#")
@@ -400,7 +400,6 @@
                    (display "Desafio resolvido! Você pode continuar.\n"))
                  (display "Resposta incorreta. Tente novamente.\n")))))])))
 
-
 (define (desafio-foldr índice-fase)
   (display "Desafio: Agregar Elementos de uma Lista com foldr\n")
   (display "Escreva uma função que use 'foldr' para somar os elementos pares e subtrair os ímpares de uma lista.\n")
@@ -429,10 +428,40 @@
                    (display "Desafio resolvido! Você pode continuar.\n"))
                  (display "Resposta incorreta. Tente novamente.\n")))))])))
 
+; Função para o desafio de funções anônimas
+(define (desafio-funcoes-anonimas índice-fase)
+  (display "Desafio: Funções Anônimas Avançadas em Racket\n")
+  (display "Você precisa criar uma função anônima que recebe uma lista de números e retorna uma nova lista contendo o quadrado de cada número. Qual das seguintes expressões é correta?\n\n")
+
+  (display "1) (lambda (lst) (map (lambda (x) (* x x)) lst))\n")
+  (display "2) (define (lst) (map (lambda (x) (* x x)) lst))\n")
+  (display "3) (lambda (lst) (for-each (lambda (x) (* x x)) lst))\n")
+  (display "4) (anonymous (lst) (map (lambda (x) (* x x)) lst))\n")
+  (display "Digite o número da sua resposta, '?' para uma dica ou 'pular': ")
+
+  (let* ([resposta (read)])
+    (cond
+      [(equal? resposta 1)
+       (begin
+         (vector-set! desafios-corretos índice-fase (add1 (vector-ref desafios-corretos índice-fase)))
+         (vector-set! desafios-resolvidos índice-fase #t)
+         (display "Resposta correta! A opção 1 usa uma função anônima com 'map' para aplicar o quadrado a cada elemento da lista.\n"))]
+      [(equal? resposta '?)
+       (begin
+         (display "Dica: Lembre-se de que 'map' aplica uma função a cada elemento de uma lista e retorna uma nova lista com os resultados. As funções anônimas em Racket são definidas com 'lambda'.\n")
+         (desafio-funcoes-anonimas índice-fase))]
+      [(string=? (format "~a" resposta) "pular")
+       (begin
+         (vector-set! desafios-pulados índice-fase (add1 (vector-ref desafios-pulados índice-fase)))
+         (display "Desafio pulado. A resposta correta era a opção 1.\n"))]
+      [else
+       (begin
+         (display "Resposta incorreta. Tente novamente.\n")
+         (desafio-funcoes-anonimas índice-fase))])))
 
 ; Lista de funções de desafio para cada fase
 
-(define desafios (list desafio-soma desafio-multiplicação desafio-declaracao-variaveis desafio-soma-lista desafio-condicionais desafio-maximo desafio-map desafio-filter desafio-foldr desafio-struct desafio-operadores-lógicos desafio-inverter-lista desafio-struct-ponto))
+(define desafios (list desafio-soma desafio-multiplicação desafio-declaracao-variaveis desafio-soma-lista desafio-condicionais desafio-maximo desafio-map desafio-filter desafio-foldr desafio-struct desafio-operadores-lógicos desafio-inverter-lista desafio-struct-ponto desafio-funcoes-anonimas))
 
 
 ; Função para mostrar o labirinto com neblina de guerra
@@ -488,9 +517,9 @@
           (cons '(5 5) desafio-inverter-lista))
     ; Fase 4
     (list (cons '(1 4) desafio-map)
-          (cons '(5 6) desafio-filter)
-          (cons '(5 4) desafio-foldr))
-  ))
+          (cons '(7 3) desafio-filter)
+          (cons '(5 4) desafio-foldr)
+          (cons '(2 7) desafio-funcoes-anonimas))))
 
 ; Conteúdos educativos para cada fase
 (define conteúdos-educativos
