@@ -1,6 +1,28 @@
 #lang racket
 
 (require racket/base)
+(require racket/system)
+
+; Função para abrir um PDF com base no índice da fase
+(define (abrir-pdf índice-fase)
+  (define nome-pdf
+    (cond
+      [(= índice-fase 0) "2 - fundamentos-notas-de-aula.pdf"]
+      [(= índice-fase 1) "3 - dados-compostos-notas-de-aula.pdf"]
+      [(= índice-fase 2) "6 - funcoes-notas-de-aula.pdf"]
+      [(= índice-fase 3) "6 - funcoes-notas-de-aula.pdf"]
+      [else "documento-padrao.pdf"])) ; Caso padrão
+
+  (define os (system-type 'os))
+  (define comando-abrir
+    (cond
+      [(eq? os 'windows) (string-append "start \"\" \"" nome-pdf "\"")]
+      [(eq? os 'macosx) (string-append "open \"" nome-pdf "\"")]
+      [(eq? os 'unix) (string-append "xdg-open \"" nome-pdf "\"")]
+      [else (error "Sistema operacional não suportado")]))
+  (system comando-abrir))
+
+
 
 ; Definição dos labirintos para cada fase
 (define labirintos
@@ -439,7 +461,7 @@
 (define (jogar-fase índice-fase)
   ; Exibir conteúdo educativo antes de começar a fase
   (exibir-conteúdo-educativo índice-fase)
-
+  (abrir-pdf índice-fase)
   (define labirinto-atual (list-ref labirintos índice-fase))
   (inicializar-células-visitadas labirinto-atual)
   (define desafios-da-fase (list-ref desafios-posições índice-fase))
