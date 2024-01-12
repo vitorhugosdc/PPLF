@@ -49,21 +49,20 @@
      ("#" "#" "#" "#" "#" "#" "#" "#" "#" "#"))
     '(("#" "#" "#" "#" "#" "#" "#" "#" "#" "#" "#" "#")
      ("#" " " " " " " "D" " " " " " " "#" "#" "#" "#")
-     ("#" " " "#" "#" "#" "#" "#" "#" " " "#" "#" "#")
+     ("#" " " "#" "#" "#" "#" "#" "#" " " "#" " " "#")
      ("#" " " " " " " " " "#" " " " " "#" "#" "#" "#")
-     ("#" "#" "#" " " "#" "#" " " "#" "#" "#" "#" "#")
-     ("#" " " " " " " " " " " " " "S" "#" "#" "#" "#")
-     ("#" " " "#" "#" "#" " " "#" "#" " " "#" "#" "#")
-     ("#" " " " " "D" " " " " " " " " "#" "#" "#" "#")
-     ("#" "#" "#" "#" "#" "#" "#" " " " " "#" "#" "#")
-     ("#" "#" "#" "#" "#" "#" "#" "#" "#" "#" "#" "#")
-     ("#" "#" "#" "#" "#" "#" "#" "#" "#" "#" "#" "#")
+     ("#" "#" "#" " " "#" "#" " " "#" "#" " " "#" "#")
+     ("#" " " " " " " "D" " " " " " " "#" "#" "#" "#")
+     ("#" " " "#" "#" " " " " "#" "#" " " "#" "#" "#")
+     ("#" " " " " "D" " " " " " " " " "#" "#" " " "#")
+     ("#" "#" "#" "#" " " "#" "#" " " " " "#" " " "#")
+     ("#" "#" " " "#" "S" "#" "#" "#" "#" "#" " " "#")
+     ("#" "#" " " "#" "#" "#" "#" "#" "#" "#" "#" "#")
      ("#" "#" "#" "#" "#" "#" "#" "#" "#" "#" "#" "#"))))
-
 
 ; Definição das posições iniciais e de saída para cada fase
 (define posições-iniciais '((1 1) (1 1) (1 1) (1 1)))  ; Posição inicial para cada fase
-(define posições-saída '((3 5) (1 5) (5 7) (5 7)))     ; Posição de saída de cada fase
+(define posições-saída '((3 5) (1 5) (5 7) (9 4)))     ; Posição de saída de cada fase
 
 
 ; Desafio resolvido para cada fase
@@ -402,9 +401,38 @@
                  (display "Resposta incorreta. Tente novamente.\n")))))])))
 
 
+(define (desafio-foldr índice-fase)
+  (display "Desafio: Agregar Elementos de uma Lista com foldr\n")
+  (display "Escreva uma função que use 'foldr' para somar os elementos pares e subtrair os ímpares de uma lista.\n")
+  (display "Por exemplo, para a lista (2 3 4 5), a função deve retornar -2.\n")
+  (display "Defina a função como (define (agregar-elementos lst)... \n\n")
+  (let* ([definição-função (read)])
+    (cond
+      [(equal? definição-função '?)
+       (begin
+         (display "Dica: A função 'foldr' em Racket pode ser usada com uma função anônima. Considere o uso de condicionais dentro da função anônima para tratar números pares e ímpares diferentemente.\n")
+         (desafio-foldr índice-fase))]
+      [(string=? (format "~a" definição-função) "pular")
+       (begin
+         (vector-set! desafios-pulados índice-fase (add1 (vector-ref desafios-pulados índice-fase)))
+         (display "Desafio pulado.\n")
+         (display "Uma solução seria usar 'foldr' com uma função que soma se o número é par e subtrai se é ímpar.\n"))]
+      [else
+       (let* ([contexto (make-base-namespace)])
+         (eval definição-função contexto)
+         (let ([função-agregar (eval 'agregar-elementos contexto)])
+           (let ([resultado (função-agregar (list 2 3 4 5))])
+             (if (= resultado -2)
+                 (begin
+                   (vector-set! desafios-corretos índice-fase (add1 (vector-ref desafios-corretos índice-fase)))
+                   (vector-set! desafios-resolvidos índice-fase #t)
+                   (display "Desafio resolvido! Você pode continuar.\n"))
+                 (display "Resposta incorreta. Tente novamente.\n")))))])))
+
+
 ; Lista de funções de desafio para cada fase
 
-(define desafios (list desafio-soma desafio-multiplicação desafio-declaracao-variaveis desafio-soma-lista desafio-condicionais desafio-maximo desafio-map desafio-filter desafio-struct desafio-operadores-lógicos desafio-inverter-lista desafio-struct-ponto))
+(define desafios (list desafio-soma desafio-multiplicação desafio-declaracao-variaveis desafio-soma-lista desafio-condicionais desafio-maximo desafio-map desafio-filter desafio-foldr desafio-struct desafio-operadores-lógicos desafio-inverter-lista desafio-struct-ponto))
 
 
 ; Função para mostrar o labirinto com neblina de guerra
@@ -459,8 +487,9 @@
           (cons '(4 1) desafio-struct-ponto)
           (cons '(5 5) desafio-inverter-lista))
     ; Fase 4
-    (list (cons '(7 3) desafio-map)
-          (cons '(5 6) desafio-filter))
+    (list (cons '(1 4) desafio-map)
+          (cons '(5 6) desafio-filter)
+          (cons '(5 4) desafio-foldr))
   ))
 
 ; Conteúdos educativos para cada fase
