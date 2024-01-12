@@ -639,7 +639,9 @@
                          [função-desafio (cdr par-desafio-posição)])
                      (when (equal? posição pos-desafio)
                        (função-desafio índice-fase)
-                       (vector-set! desafios-resolvidos índice-fase #t))))
+                       (vector-set! desafios-resolvidos índice-fase #t)
+                       (limpar-console)
+                       (mostrar-labirinto labirinto-atual posição))))
                  desafios-da-fase)
        (let ([movimento (read)])
          (cond
