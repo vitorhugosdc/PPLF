@@ -8,8 +8,8 @@
   (define nome-pdf
     (cond
       [(= índice-fase 0) "2 - fundamentos-notas-de-aula.pdf"]
-      [(= índice-fase 1) "3 - dados-compostos-notas-de-aula.pdf"]
-      [(= índice-fase 2) "6 - funcoes-notas-de-aula.pdf"]
+      [(= índice-fase 1) "2 - fundamentos-notas-de-aula.pdf"]
+      [(= índice-fase 2) "3 - dados-compostos-notas-de-aula.pdf"]
       [(= índice-fase 3) "6 - funcoes-notas-de-aula.pdf"]
       [else "documento-padrao.pdf"])) ; Caso padrão
 
@@ -42,7 +42,7 @@
      ("#" " " "#" "#" "#" "#" "#" "#" " " "#")
      ("#" " " " " " " " " "#" " " " " "#" "#")
      ("#" "#" "#" " " "#" "#" " " "#" "#" "#")
-     ("#" " " " " " " " " " " " " "S" "#" "#")
+     ("#" " " " " " " " " "D" " " "S" "#" "#")
      ("#" " " "#" "#" "#" " " "#" "#" " " "#")
      ("#" " " " " "D" " " " " " " " " "#" "#")
      ("#" "#" "#" "#" "#" "#" "#" " " " " "#")
@@ -292,6 +292,33 @@
                    (display "Desafio resolvido! Você pode continuar.\n"))
                  (display "Resposta incorreta. Tente novamente.\n")))))])))
 
+; Função para o desafio de inverter uma lista
+(define (desafio-inverter-lista índice-fase)
+  (display "Desafio: Escreva a definição completa de uma função que inverte uma lista. Digite '?' para uma dica ou 'pular' para pular.\n")
+  (display "Por favor, defina o cabeçalho da função como (define (inverter-lista lst)... \n\n")
+  (let* ([definição-função (read)])
+    (cond
+      [(equal? definição-função '?)
+       (begin
+         (display "Dica: Você pode usar uma função recursiva para inverter a lista. Considere como você pode construir a lista invertida passo a passo.\n")
+         (desafio-inverter-lista índice-fase))]
+      [(string=? (format "~a" definição-função) "pular")
+       (begin
+         (vector-set! desafios-pulados índice-fase (add1 (vector-ref desafios-pulados índice-fase)))
+         (display "Desafio pulado.\n")
+         (display "Uma forma de inverter uma lista em Racket é usar recursão para reconstruir a lista de trás para frente.\n"))]
+      [else
+       (let* ([contexto (make-base-namespace)])
+         (eval definição-função contexto)  ; Avalia a definição da função
+         (let ([função-inverter (eval 'inverter-lista contexto)])  ; Recupera a função definida
+           (let ([resultado (função-inverter (list 1 2 3 4 5))])  ; Testa a função
+             (if (equal? resultado (list 5 4 3 2 1))
+                 (begin
+                   (vector-set! desafios-corretos índice-fase (add1 (vector-ref desafios-corretos índice-fase)))
+                   (vector-set! desafios-resolvidos índice-fase #t)
+                   (display "Desafio resolvido! Você pode continuar.\n"))
+                 (display "Resposta incorreta. Tente novamente.\n")))))])))
+
 (define (desafio-map índice-fase)
   (display "Desafio: Escreva uma função usando 'map' que some 1 a cada elemento de uma lista. Digite '?' para uma dica ou 'pular' para pular.\n")
   (display "Por exemplo, você pode escrever '(map add1 lst)'.\n")
@@ -345,7 +372,7 @@
 
 ; Lista de funções de desafio para cada fase
 
-(define desafios (list desafio-soma desafio-multiplicação desafio-declaracao-variaveis desafio-soma-lista desafio-condicionais desafio-maximo desafio-map desafio-filter desafio-struct desafio-operadores-lógicos))
+(define desafios (list desafio-soma desafio-multiplicação desafio-declaracao-variaveis desafio-soma-lista desafio-condicionais desafio-maximo desafio-map desafio-filter desafio-struct desafio-operadores-lógicos desafio-inverter-lista))
 
 
 ; Função para mostrar o labirinto com neblina de guerra
@@ -396,7 +423,8 @@
           (cons '(2 5) desafio-operadores-lógicos))
     ; Fase 3
     (list (cons '(1 4) desafio-soma-lista)
-          (cons '(7 3) desafio-struct))
+          (cons '(7 3) desafio-struct)
+          (cons '(5 5) desafio-inverter-lista))
     ; Fase 4
     (list (cons '(7 3) desafio-map)
           (cons '(5 6) desafio-filter))
